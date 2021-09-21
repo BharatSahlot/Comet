@@ -47,13 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 30
   visibleRange: 50
-  maxStrength: 10
+  maxStrength: 20
   splitDelay: 0.6
   splitProbability: 0.4
   minStrengthToSplit: 4
   maxDeflection: 20
   minDeflection: 10
-  maxDepth: 5
+  maxDepth: 20
   prefab: {fileID: 4338602900875071937}
   strength: 0
 --- !u!96 &4338602900875071938
@@ -98,7 +98,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
+  m_Time: 1
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -107,7 +107,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.11277431
+        value: 0.25652432
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -116,7 +116,7 @@ TrailRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.4134103
-        value: 0.06875
+        value: 0.2125
         inSlope: -0.10062894
         outSlope: -0.10062894
         tangentMode: 0

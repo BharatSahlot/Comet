@@ -64,7 +64,7 @@ public class Shield : MonoBehaviour
         var incident = other.transform.up;
         var reflected = Vector2.Reflect(incident, normal);
         
-        other.transform.position = contactPoint;
+        // other.transform.position = contactPoint;
         other.transform.up = reflected;
     }
 }

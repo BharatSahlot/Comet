@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
+public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public float X { get; private set; } = 0;
     public float Y { get; private set; } = 0;
@@ -32,20 +32,21 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         _using = false;
         transform.position = _defPos;
     }
-
-    public void OnPointerMove(PointerEventData eventData)
+    
+    private void Update()
     {
         if (!_using) return;
         // transform.position = eventData.position;
-        var dir = (eventData.position - _defPos);
+        
+        var dir = (Input.mousePosition.xy() - _defPos);
         dir = Vector2.ClampMagnitude(dir, radius);
         transform.position = _defPos + dir;
-
+    
         var px = X;
         var py = Y;
         X = dir.x / radius;
         Y = dir.y / radius;
-
+    
         DeltaX = X - px;
         DeltaY = Y - py;
     }

@@ -33,7 +33,7 @@ public class CosmicRaySpawner : MonoBehaviour
             // var ray = Instantiate(prefab, position, prefab.transform.rotation);
             var ray = _pool.Borrow(false);
             ray.transform.position = position;
-            ray.gameObject.name = "Cosmic Ray";
+            // ray.gameObject.name = "Cosmic Ray";
             ray.transform.rotation = Quaternion.LookRotation(Vector3.forward, lookDir.normalized);
             ray.pool = _pool;
             ray.gameObject.SetActive(true);

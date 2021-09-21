@@ -41,8 +41,8 @@ public class CosmicRay : MonoBehaviour
         
         _trail = GetComponent<TrailRenderer>();
         _defGradient = _trail.colorGradient;
-        
         SetStrength(strength);
+        _trail.emitting = true;
 
         if (Camera.main is { }) _camera = Camera.main.transform;
     }
@@ -51,6 +51,7 @@ public class CosmicRay : MonoBehaviour
     {
         _depth = 0;
         _elapsed = 0;
+        _trail.emitting = false;
     }
 
     private void Update()
@@ -74,7 +75,7 @@ public class CosmicRay : MonoBehaviour
         {
             // split
             var angle = Vector2.Angle(Vector2.up, transform.up);
-            var rotation = Quaternion.AngleAxis(angle + GetDeflection(), Vector3.forward);
+            var rotation = Quaternion.AngleAxis(angle + GetDeflection(maxDeflection, minDeflection), Vector3.forward);
             // var go = Instantiate(prefab, transform.position, rotation);
             var go = pool.Borrow(false);
             go.transform.position = transform.position;
@@ -83,9 +84,9 @@ public class CosmicRay : MonoBehaviour
             go._depth = _depth + 1;
             go.strength = Random.Range(strength / 7, strength * 6 / 7);
             go.gameObject.SetActive(true);
-            go.gameObject.name = "Deflected Ray";
+            // go.gameObject.name = "Deflected Ray";
             SetStrength(strength - go.strength);
-            transform.rotation = Quaternion.AngleAxis(angle + GetDeflection(), Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(angle + GetDeflection(minDeflection, 0), Vector3.forward);
         }
     }
 
@@ -106,7 +107,7 @@ public class CosmicRay : MonoBehaviour
         _speed = maxSpeed * strength / maxStrength;
     }
 
-    private float GetDeflection()
+    private static float GetDeflection(float maxDeflection, float minDeflection)
     {
         float delta = maxDeflection - minDeflection;
         delta = Random.Range(-delta, delta);
