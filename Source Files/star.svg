@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="star.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.5894754"
+     inkscape:cx="258.7046"
+     inkscape:cy="601.38217"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:type="star"
+       style="opacity:1;fill:#ffffff;fill-opacity:1"
+       id="path5214"
+       inkscape:flatsided="false"
+       sodipodi:sides="5"
+       sodipodi:cx="376.60605"
+       sodipodi:cy="522.49847"
+       sodipodi:r1="262.83072"
+       sodipodi:r2="131.41536"
+       sodipodi:arg1="0.68482125"
+       sodipodi:arg2="1.3131398"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 580.17688,688.74799 410.09267,649.57578 281.40021,767.47977 266.09628,593.61519 114.19477,507.65572 274.82063,439.37371 309.6328,268.34385 424.20897,400.00783 597.62558,380.26503 507.81169,529.91985 Z"
+       transform="matrix(0.26458333,0,0,0.26458333,2.2442271,8.5280629)"
+       inkscape:transform-center-x="5.5815038"
+       inkscape:transform-center-y="-12.325981"
+       inkscape:export-filename="D:\Repos\Save the bit\Save the bit\Assets\2D\star.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+</svg>
