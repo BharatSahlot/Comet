@@ -26,9 +26,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="px"
      showgrid="false"
-     inkscape:zoom="0.67081229"
-     inkscape:cx="357.7752"
-     inkscape:cy="561.25984"
+     inkscape:zoom="0.94867184"
+     inkscape:cx="319.92095"
+     inkscape:cy="431.65611"
      inkscape:window-width="1920"
      inkscape:window-height="1057"
      inkscape:window-x="-8"
@@ -117,5 +117,10 @@
          id="polyline13723"
          style="stroke:#ffffff;stroke-opacity:1" />
     </g>
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 65.246487,82.434378 c 0,0 19.019733,10.855244 18.880284,28.792752 -0.139449,17.93751 -18.880284,28.79275 -18.880284,28.79275 l 63.896383,-28.79275 z"
+       id="path901"
+       sodipodi:nodetypes="csccc" />
   </g>
 </svg>
