@@ -1,18 +1,47 @@
 using System;
 using UnityEngine;
 
+[Serializable]
+public class RigidbodyController
+{
+    public float speed = 100;
+    public float smoothMoveRotation = 360;
+    public float smoothLookRotation = 360;
+    
+    public bool IsRotating { get; private set; }
+    
+    [HideInInspector] public Rigidbody2D rigidbody;
+
+    private Vector2 _moveDir;
+    private Vector2 _angularVelocity;
+
+    public void Update(Vector2 input)
+    {
+        var angle = Mathf.Abs(Vector2.SignedAngle(_moveDir, input));
+        _moveDir = Vector2.SmoothDamp(_moveDir, input, ref _angularVelocity, angle / (smoothMoveRotation), smoothMoveRotation * Time.fixedDeltaTime).normalized;
+        
+        rigidbody.AddForce(_moveDir * speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+        
+        var dir = rigidbody.velocity.normalized;
+        angle = Vector2.SignedAngle(Vector2.up, dir);
+        var rot = Mathf.MoveTowardsAngle(rigidbody.rotation, angle, smoothLookRotation * Time.fixedDeltaTime);
+        var delta = Mathf.DeltaAngle(rigidbody.rotation, rot);
+        IsRotating = !Mathf.Approximately(delta, 0);
+        
+        rigidbody.MoveRotation(rot);
+    }
+}
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Joystick joystick;
     [SerializeField] private Rigidbody2D shield;
+    [SerializeField] private Transform sprite;
+
+    [SerializeField] private RigidbodyController controller;
 
     private Rigidbody2D _rigidbody;
     
-    public float speed = 10;
-    public float maxRot = 5;
-    public float maxGRot = 2;
-    public float shieldAngle = 60;
-
     public Vector3 Velocity => _rigidbody.velocity;
 
     private Vector2 _up = Vector2.up;
@@ -21,6 +50,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        controller.rigidbody = _rigidbody;
     }
     
     public void AddGravity(Vector2 origin, float mass)
@@ -32,20 +62,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var dir = new Vector3(joystick.X, joystick.Y).normalized;
-        var angle = Mathf.Abs(Vector2.SignedAngle(_up, dir));
-        _up = Vector2.SmoothDamp(_up, dir, ref _currentVelocity, angle / (maxRot), maxRot * Time.fixedDeltaTime).normalized;
-
-        _rigidbody.AddForce(_up * speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
-
-        dir = _rigidbody.velocity.normalized;
-        angle = Vector2.SignedAngle(Vector2.up, dir);
-        var rot = Mathf.MoveTowardsAngle(_rigidbody.rotation, angle, maxGRot * Time.fixedDeltaTime);
-        _rigidbody.MoveRotation(rot);
-
-        // shield.velocity = _rigidbody.velocity;
-        // shield.position = _rigidbody.position;
-        // shield.rotation = _rigidbody.rotation;
+        var dir = new Vector2(joystick.X, joystick.Y).normalized;
+        controller.Update(dir);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
