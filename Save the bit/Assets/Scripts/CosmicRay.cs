@@ -21,7 +21,7 @@ public class CosmicRay : MonoBehaviour
     
     [SerializeField] private CosmicRay prefab;
 
-    [HideInInspector] public Pool<CosmicRay> pool;
+    public Pool<CosmicRay> Pool;
 
     private Transform _camera;
     private TrailRenderer _trail;
@@ -60,7 +60,7 @@ public class CosmicRay : MonoBehaviour
         if (Vector3.Distance(transform.position, _camera.position) > visibleRange)
         {
             // Destroy(gameObject);
-            pool.Return(this);
+            Pool.Return(this);
             return;
         }
 
@@ -77,10 +77,10 @@ public class CosmicRay : MonoBehaviour
             var angle = Vector2.Angle(Vector2.up, transform.up);
             var rotation = Quaternion.AngleAxis(angle + GetDeflection(maxDeflection, minDeflection), Vector3.forward);
             // var go = Instantiate(prefab, transform.position, rotation);
-            var go = pool.Borrow(false);
+            var go = Pool.Borrow(false);
             go.transform.position = transform.position;
             go.transform.rotation = rotation;
-            go.pool = pool;
+            go.Pool = Pool;
             go._depth = _depth + 1;
             go.strength = Random.Range(strength / 7, strength * 6 / 7);
             go.gameObject.SetActive(true);

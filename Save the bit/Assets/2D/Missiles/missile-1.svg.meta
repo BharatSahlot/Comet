@@ -39,17 +39,26 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: 
+      name: missile-1
       originalName: 
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 0
-        height: 0
+        width: 103
+        height: 256
       spriteID: af71bcc8ab27434429c8324df13d6216
       internalID: 0
-    PhysicsOutlines: []
+    PhysicsOutlines:
+    - Vertices:
+      - {x: 21.5, y: 92}
+      - {x: -22.5, y: 92}
+      - {x: -24.5, y: -43}
+      - {x: -37.5, y: -72}
+      - {x: -37.5, y: -98}
+      - {x: 29.5, y: -98}
+      - {x: 38.5, y: -72}
+      - {x: 20.5, y: -45}

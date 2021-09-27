@@ -12,7 +12,7 @@ public class RigidbodyController
     
     [HideInInspector] public Rigidbody2D rigidbody;
 
-    private Vector2 _moveDir;
+    private Vector2 _moveDir = Vector2.up;
     private Vector2 _angularVelocity;
 
     public void Update(Vector2 input)
@@ -37,15 +37,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Joystick joystick;
     [SerializeField] private Rigidbody2D shield;
     [SerializeField] private Transform sprite;
+    [SerializeField] private Explosion explosion;
 
     [SerializeField] private RigidbodyController controller;
 
     private Rigidbody2D _rigidbody;
     
     public Vector3 Velocity => _rigidbody.velocity;
-
-    private Vector2 _up = Vector2.up;
-    private Vector2 _currentVelocity;
 
     private void Awake()
     {
@@ -68,6 +66,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if ((other.gameObject.layer & LayerMask.NameToLayer("CosmicRay")) == 0) return;
+        if (other.gameObject.layer == LayerMask.NameToLayer("CosmicRay"))
+        {
+            Debug.Log("Hit by ray");
+        } else if (other.gameObject.layer == LayerMask.NameToLayer("Missile"))
+        {
+            explosion.ExplodeAt(transform.position);
+            
+            joystick = null;
+            sprite = null;
+            explosion = null;
+            controller = null;
+            _rigidbody = null;
+            Destroy(shield.gameObject);
+            shield = null;
+            Destroy(gameObject);
+        }
     }
 }

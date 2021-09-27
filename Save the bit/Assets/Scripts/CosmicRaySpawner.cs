@@ -27,6 +27,8 @@ public class CosmicRaySpawner : MonoBehaviour
     {
         while (true)
         {
+            if (player == null) break;
+            
             var playerPos = (player.transform.position + player.Velocity * (spawnDistance / prefab.maxSpeed)).xy();
             var position = player.transform.position.xy() + Random.insideUnitCircle.normalized * spawnDistance;
             var lookDir = playerPos - position;
@@ -35,7 +37,7 @@ public class CosmicRaySpawner : MonoBehaviour
             ray.transform.position = position;
             // ray.gameObject.name = "Cosmic Ray";
             ray.transform.rotation = Quaternion.LookRotation(Vector3.forward, lookDir.normalized);
-            ray.pool = _pool;
+            ray.Pool = _pool;
             ray.gameObject.SetActive(true);
             yield return new WaitForSeconds(spawnDelay);
         }
