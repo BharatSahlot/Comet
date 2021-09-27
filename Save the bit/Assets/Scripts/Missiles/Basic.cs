@@ -8,23 +8,6 @@ namespace Missiles
     [AddComponentMenu("Missiles/Basic")]
     public class Basic : MonoBehaviour
     {
-        public enum ModificationType
-        {
-            None,
-            InvertX,
-            InvertY,
-            InvertXY,
-            ChangeTarget,
-            SelfDestruct
-        }
-
-        [Serializable]
-        public class Modification
-        {
-            public ModificationType modificationType;
-            [Range(0, 1)] public float probability;
-        }
-
         [SerializeField] private float lifeTime;
         [SerializeField] private float randomLifeTimeDelta;
         [SerializeField] private float dieAnimationTime;
@@ -43,7 +26,7 @@ namespace Missiles
 
         private float _lifeTime;
         private float _elapsed;
-        private ModificationType _currentModification;
+        private ModificationType _currentModificationType;
 
         private Vector3 _defaultScale;
         private bool _dead = false;
@@ -69,7 +52,7 @@ namespace Missiles
             _xMultiplier = _yMultiplier = 1;
             _elapsed = 0;
             _dead = false;
-            _currentModification = ModificationType.None;
+            _currentModificationType = ModificationType.None;
         }
 
         private void Update()
@@ -109,9 +92,9 @@ namespace Missiles
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("CosmicRay"))
             {
-                if (_currentModification != ModificationType.None)
+                if (_currentModificationType != ModificationType.None)
                 {
-                    _currentModification = ModificationType.None;
+                    _currentModificationType = ModificationType.None;
                 }
                 else
                 {
@@ -123,13 +106,13 @@ namespace Missiles
                         if (random <= sum)
                         {
                             // apply modification
-                            _currentModification = modification.modificationType;
+                            _currentModificationType = modification.modificationType;
                             break;
                         }
                     }
                 }
 
-                ApplyModification(_currentModification);
+                ApplyModification(_currentModificationType);
                 // } else if ((other.gameObject.layer & LayerMask.NameToLayer("Player")) != 0)
             } else if (LayerMask.NameToLayer("Missile") == other.gameObject.layer)
             {
@@ -178,6 +161,8 @@ namespace Missiles
                     }
                     break;
                 case ModificationType.SelfDestruct:
+                    var go = Instantiate(explosion);
+                    go.ExplodeAt(transform.position);
                     Pool.Return(this);
                     break;
                 default:

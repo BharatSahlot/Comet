@@ -6279,6 +6279,15 @@ MonoBehaviour:
     smoothMoveRotation: 360
     smoothLookRotation: 360
     rigidbody: {fileID: 0}
+  modifications:
+  - modificationType: 1
+    probability: 0.3
+  - modificationType: 2
+    probability: 0.3
+  - modificationType: 4
+    probability: 0.25
+  - modificationType: 3
+    probability: 0.15
 --- !u!50 &1397236808
 Rigidbody2D:
   serializedVersion: 4
