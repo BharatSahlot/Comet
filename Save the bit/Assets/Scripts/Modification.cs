@@ -1,4 +1,5 @@
 ﻿using System;
+using UI;
 using UnityEngine;
 
 public enum ModificationType
@@ -17,4 +18,6 @@ public class Modification
 {
     public ModificationType modificationType;
     [Range(0, 1)] public float probability;
+
+    public PlayerEffectPanelUI playerEffectPanelUI;
 }

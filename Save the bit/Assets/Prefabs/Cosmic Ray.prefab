@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16383945ef36dc04fab4ec1740cf3336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 30
+  maxSpeed: 40
   visibleRange: 50
   maxStrength: 20
   splitDelay: 0.6

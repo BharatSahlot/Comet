@@ -165,14 +165,19 @@ MonoBehaviour:
   modifications:
   - modificationType: 1
     probability: 0.3
+    playerEffectPanelUI: {fileID: 0}
   - modificationType: 2
     probability: 0.3
+    playerEffectPanelUI: {fileID: 0}
   - modificationType: 3
     probability: 0.2
-  - modificationType: 4
-    probability: 0.15
+    playerEffectPanelUI: {fileID: 0}
   - modificationType: 5
+    probability: 0.15
+    playerEffectPanelUI: {fileID: 0}
+  - modificationType: 6
     probability: 0.05
+    playerEffectPanelUI: {fileID: 0}
   explosion: {fileID: 7937482838394766938, guid: 740352428581a2e4a86536b7455175e0, type: 3}
   offScreenIcon: {fileID: 5323392153539188187, guid: 98f50174e0e2bed41addb977a2bcb101, type: 3}
   screenBorder: 0.1

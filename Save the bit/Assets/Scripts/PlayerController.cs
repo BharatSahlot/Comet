@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Joystick joystick;
     [SerializeField] private Rigidbody2D shield;
+    [SerializeField] private TimeManager timeManager;
     [SerializeField] private Transform sprite;
     [SerializeField] private Explosion explosion;
 
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
 
-    private ModificationType _currentModificationType;
+    private Modification _currentModification = null;
     private float _xMultiplier = 1;
     private float _yMultiplier = 1;
     
@@ -43,9 +44,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("CosmicRay"))
         {
-            if (_currentModificationType != ModificationType.None)
+            if (_currentModification != null)
             {
-                _currentModificationType = ModificationType.None;
+                ApplyModification(null);
             }
             else
             {
@@ -57,16 +58,16 @@ public class PlayerController : MonoBehaviour
                     if (random <= sum)
                     {
                         // apply modification
-                        _currentModificationType = modification.modificationType;
+                        ApplyModification(modification);
                         break;
                     }
                 }
             }
-
-            ApplyModification(_currentModificationType);
+            timeManager.PlayerHitRay();
         } else if (other.gameObject.layer == LayerMask.NameToLayer("Missile"))
         {
             explosion.ExplodeAt(transform.position);
+            timeManager.PlayerHitMissile();
             
             joystick = null;
             sprite = null;
@@ -79,14 +80,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ApplyModification(ModificationType modificationType)
+    private void ApplyModification(Modification modification)
     {
-        switch (modificationType)
+        if (_currentModification?.playerEffectPanelUI)
         {
-            case ModificationType.None:
-                shield.gameObject.SetActive(true);
-                _xMultiplier = _yMultiplier = 1;
-                break;
+            _currentModification.playerEffectPanelUI.Hide();
+        }
+
+        _currentModification = modification;
+        if (modification == null)
+        {
+            _currentModification = null;
+            shield.gameObject.SetActive(true);
+            _xMultiplier = _yMultiplier = 1;
+            return;
+        }
+        if (_currentModification.playerEffectPanelUI)
+        {
+            _currentModification.playerEffectPanelUI.ShowForSeconds(10);
+        }
+        switch (modification.modificationType)
+        {
             case ModificationType.InvertX:
                 _xMultiplier *= -1;
                 break;
