@@ -15,9 +15,12 @@ namespace Missiles
         [SerializeField] private TrailRenderer trail;
         [SerializeField] private Modification[] modifications;
         [SerializeField] private Explosion explosion;
-        
+        [SerializeField] private GameObject offScreenIcon;
+        [SerializeField] private float screenBorder;
+
         private Rigidbody2D _rigidbody;
         private GameObject _player;
+        private SpriteRenderer _renderer;
         
         // modification helpers
         private GameObject _target;
@@ -33,14 +36,23 @@ namespace Missiles
 
         private bool _playDeadExplosion = true;
 
+        private GameObject _icon;
+        private Camera _camera;
+
         public Pool<Basic> Pool;
 
         private void Awake()
         {
+            _renderer = GetComponent<SpriteRenderer>();
             _rigidbody = GetComponent<Rigidbody2D>();
             controller.rigidbody = _rigidbody;
             _player = GameObject.FindWithTag("Player");
             _target = _player;
+
+            _camera = Camera.main;
+            
+            _icon = Instantiate(offScreenIcon);
+            _icon.SetActive(false);
 
             _defaultScale = transform.localScale;
         }
@@ -55,6 +67,14 @@ namespace Missiles
             _currentModificationType = ModificationType.None;
         }
 
+        private void OnDisable()
+        {
+            if (_icon != null)
+            {
+                _icon.SetActive(false);
+            }
+        }
+
         private void Update()
         {
             _elapsed += Time.deltaTime;
@@ -64,10 +84,16 @@ namespace Missiles
                 var t =  elapsed / dieAnimationTime;
                 transform.localScale = _defaultScale * Mathf.Lerp(1, 0, t);
                 trail.widthMultiplier = Mathf.Lerp(1, 0, t);
+                _icon.SetActive(false);
                 
                 _dead = true;
                 if(elapsed >= dieAnimationTime) Pool.Return(this);
             }
+        }
+
+        private void LateUpdate()
+        {
+            PositionIcon();
         }
 
         private void FixedUpdate()
@@ -86,6 +112,51 @@ namespace Missiles
                 dir.y *= _yMultiplier;
             }
             controller.Update(dir);
+            
+            // PositionIcon();
+        }
+
+        private void PositionIcon()
+        {
+            if (!_dead && !_renderer.isVisible && _player != null)
+            {
+                if(!_icon.activeSelf) _icon.SetActive(true);
+            
+                var corners = new Vector3[4]
+                {
+                    _camera.ViewportToWorldPoint(new Vector3(0, 0, 0)),
+                    _camera.ViewportToWorldPoint(new Vector3(0, 1, 0)),
+                    _camera.ViewportToWorldPoint(new Vector3(1, 0, 0)),
+                    _camera.ViewportToWorldPoint(new Vector3(1, 1, 0)),
+                };
+            
+                float minX = float.MaxValue, maxX = float.MinValue;
+                float minY = float.MaxValue, maxY = float.MinValue;
+                foreach (var localCorner in corners)
+                {
+                    var corner = _camera.transform.TransformVector(localCorner);
+                    minX = Mathf.Min(minX, corner.x);
+                    minY = Mathf.Min(minY, corner.y);
+                    maxX = Mathf.Max(maxX, corner.x);
+                    maxY = Mathf.Max(maxY, corner.y);
+                }
+            
+                minX += screenBorder;
+                maxX -= screenBorder;
+                minY += screenBorder;
+                maxY -= screenBorder;
+            
+                var pos = transform.position;
+                pos.x = Mathf.Clamp(pos.x, minX, maxX);
+                pos.y = Mathf.Clamp(pos.y, minY, maxY);
+                _icon.transform.position = pos;
+            
+                _icon.transform.up = (_player.transform.position - pos).normalized;
+            }
+            else
+            {
+                if(_icon.activeSelf) _icon.SetActive(false);
+            }
         }
         
         private void OnTriggerEnter2D(Collider2D other)

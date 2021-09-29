@@ -174,6 +174,8 @@ MonoBehaviour:
   - modificationType: 5
     probability: 0.05
   explosion: {fileID: 7937482838394766938, guid: 740352428581a2e4a86536b7455175e0, type: 3}
+  offScreenIcon: {fileID: 5323392153539188187, guid: 98f50174e0e2bed41addb977a2bcb101, type: 3}
+  screenBorder: 0.1
 --- !u!1 &8114982455211906492
 GameObject:
   m_ObjectHideFlags: 0
