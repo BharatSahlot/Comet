@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Crazy
+namespace CrazySDK.CrazyLogo.Assets.Scripts
 {
     public class LoadNextScene : MonoBehaviour
     {

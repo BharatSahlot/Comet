@@ -1,38 +1,42 @@
-﻿using UnityEngine;
+﻿using CrazySDK.Script;
+using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class CrazyAdsDemoPlayer : MonoBehaviour
+namespace CrazySDK.CrazyAds.CrazyAdsDemo.DemoAssets
 {
-    [SerializeField] private CrazyAdType adType = CrazyAdType.midgame;
-
-    private readonly Vector3 pushForce = Vector3.right * 2;
-    private Rigidbody rb;
-    private Vector3 startPos;
-
-
-    private void Start()
+    [RequireComponent(typeof(Rigidbody))]
+    public class CrazyAdsDemoPlayer : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody>();
-        startPos = transform.position;
-    }
+        [SerializeField] private CrazyAdType adType = CrazyAdType.midgame;
+
+        private readonly Vector3 pushForce = Vector3.right * 2;
+        private Rigidbody rb;
+        private Vector3 startPos;
 
 
-    private void FixedUpdate()
-    {
-        transform.Translate(pushForce * Time.fixedDeltaTime);
-
-        if (!(transform.position.y < -20)) return;
-        print("Player Died!  Starting Ad Break!");
-        if (adType == CrazyAdType.rewarded) CrazyAds.Instance.beginAdBreakRewarded(respawn);
-        else CrazyAds.Instance.beginAdBreak(respawn);
-    }
+        private void Start()
+        {
+            rb = GetComponent<Rigidbody>();
+            startPos = transform.position;
+        }
 
 
-    private void respawn()
-    {
-        print("Ad Finished!  So respawning player!");
+        private void FixedUpdate()
+        {
+            transform.Translate(pushForce * Time.fixedDeltaTime);
 
-        transform.position = startPos;
-        rb.velocity = Vector3.zero;
+            if (!(transform.position.y < -20)) return;
+            print("Player Died!  Starting Ad Break!");
+            if (adType == CrazyAdType.rewarded) Scripts.CrazyAds.Instance.beginAdBreakRewarded(respawn);
+            else Scripts.CrazyAds.Instance.beginAdBreak(respawn);
+        }
+
+
+        private void respawn()
+        {
+            print("Ad Finished!  So respawning player!");
+
+            transform.position = startPos;
+            rb.velocity = Vector3.zero;
+        }
     }
 }

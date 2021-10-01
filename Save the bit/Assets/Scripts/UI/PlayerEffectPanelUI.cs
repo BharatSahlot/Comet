@@ -18,8 +18,10 @@ namespace UI
             _elapsed = 0;
         }
 
-        public void Hide()
+        public void ResetAndHide()
         {
+            _elapsed = _duration = 0;
+            timeLeftIndicator.fillAmount = 1;
             gameObject.SetActive(false);
         }
 
@@ -31,7 +33,7 @@ namespace UI
         private void Update()
         {
             _elapsed += Time.deltaTime;
-            timeLeftIndicator.fillAmount = (_elapsed / _duration);
+            timeLeftIndicator.fillAmount = 1 - (_elapsed / _duration);
             if (_elapsed >= _duration)
             {
                 gameObject.SetActive(false);

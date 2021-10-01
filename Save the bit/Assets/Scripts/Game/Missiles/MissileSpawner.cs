@@ -1,20 +1,21 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Missiles
+namespace Game.Missiles
 {
-    public class Spawner : MonoBehaviour
+    public class MissileSpawner : MonoBehaviour
     {
         [SerializeField] private float spawnDistance = 50;
         [SerializeField] private float spawnDelay = 1; // wait this much sec before spawning new
-        [SerializeField] private PlayerController player;
-        [SerializeField] private Basic prefab;
+        [SerializeField] private MissileBasic prefab;
 
-        private Pool<Basic> _pool;
+        internal GameObject Player;
+        
+        private Pool<MissileBasic> _pool;
 
         private void Awake()
         {
-            _pool = new Pool<Basic>(prefab, 10);
+            _pool = new Pool<MissileBasic>(prefab, 10);
         }
 
         private void Start()
@@ -26,12 +27,11 @@ namespace Missiles
         {
             while (true)
             {
-                if (player == null) break;
+                if (Player == null) break;
                 
-                var position = player.transform.position.xy() + Random.insideUnitCircle.normalized * spawnDistance;
+                var position = Player.transform.position.xy() + Random.insideUnitCircle.normalized * spawnDistance;
                 var missile = _pool.Borrow(false);
                 missile.transform.position = position;
-                // ray.gameObject.name = "Cosmic Ray";
                 missile.Pool = _pool;
                 missile.gameObject.SetActive(true);
                 yield return new WaitForSeconds(spawnDelay);
