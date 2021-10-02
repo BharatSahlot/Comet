@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-class CrazySDKInit
+namespace CrazySDK.Script
 {
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void OnRuntimeMethodLoad()
+    class CrazySDKInit
     {
-        var sdk = CrazySDK.Instance; // Trigger init by calling instance
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void OnRuntimeMethodLoad()
+        {
+            var sdk = CrazySDK.Instance; // Trigger init by calling instance
+        }
     }
 }

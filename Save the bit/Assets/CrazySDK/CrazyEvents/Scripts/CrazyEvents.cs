@@ -1,39 +1,43 @@
 ﻿using System.Collections.Generic;
+using CrazySDK.Script;
 
-public class CrazyEvents : Singleton<CrazyEvents>
+namespace CrazySDK.CrazyEvents.Scripts
 {
-    public void HappyTime()
+    public class CrazyEvents : Singleton<CrazyEvents>
     {
-        CrazySDK.Instance.HappyTime();
-    }
+        public void HappyTime()
+        {
+            Script.CrazySDK.Instance.HappyTime();
+        }
 
-    public void GameplayStart()
-    {
-        CrazySDK.Instance.GameplayStart();
-    }
+        public void GameplayStart()
+        {
+            Script.CrazySDK.Instance.GameplayStart();
+        }
 
-    public void GameplayStop()
-    {
-        CrazySDK.Instance.GameplayStop();
-    }
+        public void GameplayStop()
+        {
+            Script.CrazySDK.Instance.GameplayStop();
+        }
 
-    public string InviteLink(Dictionary<string, string> parameters)
-    {
-        return CrazySDK.Instance.InviteLink(parameters);
-    }
+        public string InviteLink(Dictionary<string, string> parameters)
+        {
+            return Script.CrazySDK.Instance.InviteLink(parameters);
+        }
 
-    public bool IsInviteLink()
-    {
-        return CrazySDK.Instance.IsInviteLink();
-    }
+        public bool IsInviteLink()
+        {
+            return Script.CrazySDK.Instance.IsInviteLink();
+        }
 
-    public string GetInviteLinkParameter(string key)
-    {
-        return CrazySDK.Instance.GetInviteLinkParameter(key);
-    }
+        public string GetInviteLinkParameter(string key)
+        {
+            return Script.CrazySDK.Instance.GetInviteLinkParameter(key);
+        }
 
-    public void CopyToClipboard(string text)
-    {
-        CrazySDK.Instance.CopyToClipboard(text);
+        public void CopyToClipboard(string text)
+        {
+            Script.CrazySDK.Instance.CopyToClipboard(text);
+        }
     }
 }

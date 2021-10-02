@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-public class CrazyAdsOptions : MonoBehaviour
+namespace CrazySDK.CrazyAds.Scripts
 {
-    public GameObject[] activeDuringAdObjs;
-    public bool freezeTimeDuringBreak = true;
+    public class CrazyAdsOptions : MonoBehaviour
+    {
+        public GameObject[] activeDuringAdObjs;
+        public bool freezeTimeDuringBreak = true;
+    }
 }

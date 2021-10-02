@@ -2,18 +2,35 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Missiles
+namespace Game.Missiles
 {
+    internal enum ModificationType
+    {
+        None,
+        InvertX,
+        InvertY,
+        InvertXY,
+        AttackFriendly,
+        SelfDestruct
+    }
+    
+    [Serializable]
+    internal class Modification
+    {
+        public float probability;
+        public ModificationType type;
+    }
+    
     [RequireComponent(typeof(Rigidbody2D))]
     [AddComponentMenu("Missiles/Basic")]
-    public class Basic : MonoBehaviour
+    public class MissileBasic : MonoBehaviour
     {
         [SerializeField] private float lifeTime;
         [SerializeField] private float randomLifeTimeDelta;
         [SerializeField] private float dieAnimationTime;
         [SerializeField] private RigidbodyController controller;
         [SerializeField] private TrailRenderer trail;
-        [SerializeField] private Modification[] modifications;
+        [SerializeField] private Modification[] modifications; // 0 must be none
         [SerializeField] private Explosion explosion;
         [SerializeField] private GameObject offScreenIcon;
         [SerializeField] private float screenBorder;
@@ -39,7 +56,7 @@ namespace Missiles
         private GameObject _icon;
         private Camera _camera;
 
-        public Pool<Basic> Pool;
+        public Pool<MissileBasic> Pool;
 
         private void Awake()
         {
@@ -55,6 +72,7 @@ namespace Missiles
             _icon.SetActive(false);
 
             _defaultScale = transform.localScale;
+            _currentModificationType = ModificationType.None;
         }
 
         private void OnEnable()
@@ -65,6 +83,8 @@ namespace Missiles
             _elapsed = 0;
             _dead = false;
             _currentModificationType = ModificationType.None;
+            transform.localScale = _defaultScale;
+            trail.widthMultiplier = 1;
         }
 
         private void OnDisable()
@@ -73,6 +93,7 @@ namespace Missiles
             {
                 _icon.SetActive(false);
             }
+            ApplyModification(ModificationType.None);
         }
 
         private void Update()
@@ -103,6 +124,7 @@ namespace Missiles
                 _rigidbody.drag = 0.5f;
                 return;
             }
+            _rigidbody.drag = 10;
 
             var dir = transform.up;
             if (_target != null)
@@ -161,13 +183,9 @@ namespace Missiles
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("CosmicRay"))
+            if (other.IsPartOfLayer("CosmicRay"))
             {
-                if (_currentModificationType != ModificationType.None)
-                {
-                    _currentModificationType = ModificationType.None;
-                }
-                else
+                if (_currentModificationType == ModificationType.None)
                 {
                     var random = Random.Range(0f, 1f);
                     float sum = 0;
@@ -177,25 +195,24 @@ namespace Missiles
                         if (random <= sum)
                         {
                             // apply modification
-                            _currentModificationType = modification.modificationType;
+                            _currentModificationType = modification.type;
                             break;
                         }
                     }
                 }
-
+                else _currentModificationType = ModificationType.None;
                 ApplyModification(_currentModificationType);
-                // } else if ((other.gameObject.layer & LayerMask.NameToLayer("Player")) != 0)
-            } else if (LayerMask.NameToLayer("Missile") == other.gameObject.layer)
+            } else if (other.IsPartOfLayer("Missile"))
             {
                 // play mini explosion
                 if (_playDeadExplosion)
                 {
-                    other.GetComponent<Basic>()._playDeadExplosion = false;
+                    other.GetComponent<MissileBasic>()._playDeadExplosion = false;
                     var go = Instantiate(explosion);
                     go.ExplodeAt(transform.position);
                 }
                 Pool.Return(this);
-            } else if(LayerMask.NameToLayer("Player") == other.gameObject.layer)
+            } else if(other.IsPartOfLayer("Player"))
             {
                 Pool.Return(this);
             }
@@ -219,7 +236,7 @@ namespace Missiles
                     _xMultiplier = -1;
                     _yMultiplier = -1;
                     break;
-                case ModificationType.ChangeTarget:
+                case ModificationType.AttackFriendly:
                     var active = Pool.Active;
                     if (active.Count == 0)
                     {
@@ -237,7 +254,8 @@ namespace Missiles
                     Pool.Return(this);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(modificationType), modificationType, null);
+                    Debug.LogError($"Unsupported Modification Type {modificationType}");
+                    break;
             }
         }
     }
