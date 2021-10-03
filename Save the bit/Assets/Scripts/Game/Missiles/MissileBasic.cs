@@ -21,6 +21,8 @@ namespace Game.Missiles
         public ModificationType type;
     }
     
+    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Animation))]
     [RequireComponent(typeof(Rigidbody2D))]
     [AddComponentMenu("Missiles/Basic")]
     public class MissileBasic : MonoBehaviour
@@ -38,6 +40,7 @@ namespace Game.Missiles
         private Rigidbody2D _rigidbody;
         private GameObject _player;
         private SpriteRenderer _renderer;
+        private Animation _animation;
         
         // modification helpers
         private GameObject _target;
@@ -60,11 +63,10 @@ namespace Game.Missiles
 
         private void Awake()
         {
+            _animation = GetComponent<Animation>();
             _renderer = GetComponent<SpriteRenderer>();
             _rigidbody = GetComponent<Rigidbody2D>();
             controller.rigidbody = _rigidbody;
-            _player = GameObject.FindWithTag("Player");
-            _target = _player;
 
             _camera = Camera.main;
             
@@ -77,6 +79,9 @@ namespace Game.Missiles
 
         private void OnEnable()
         {
+            _player = GameObject.FindWithTag("Player");
+            _target = _player;
+            
             _playDeadExplosion = true;
             _lifeTime = lifeTime + Random.Range(-1, 1) * randomLifeTimeDelta;
             _xMultiplier = _yMultiplier = 1;
@@ -94,6 +99,7 @@ namespace Game.Missiles
                 _icon.SetActive(false);
             }
             ApplyModification(ModificationType.None);
+            _animation.Stop();
         }
 
         private void Update()
@@ -220,6 +226,11 @@ namespace Game.Missiles
 
         private void ApplyModification(ModificationType modificationType)
         {
+            _animation.Stop();
+            if (modificationType != ModificationType.None)
+            {
+                _animation.Play();
+            }
             switch (modificationType)
             {
                 case ModificationType.None:

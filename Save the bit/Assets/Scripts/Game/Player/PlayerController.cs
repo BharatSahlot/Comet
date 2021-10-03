@@ -11,6 +11,7 @@ namespace Game.Player
 
         public Vector3 Velocity => _rigidbody.velocity;
 
+        public float minRayStrength = 10; // only rays above this strength can affect player
         [SerializeField] private RigidbodyController controller;
 
         internal GameObject Shield;
@@ -36,7 +37,11 @@ namespace Game.Player
         {
             if (other.IsPartOfLayer("CosmicRay"))
             {
-                OnCosmicRayHit(this, other.GetComponent<CosmicRay>());
+                var ray = other.GetComponent<CosmicRay>();
+                if (ray.strength >= minRayStrength)
+                {
+                    OnCosmicRayHit(this, ray);
+                }
             } else if (other.IsPartOfLayer("Missile"))
             {
                 OnMissileHit(this, other.GetComponent<MissileBasic>());

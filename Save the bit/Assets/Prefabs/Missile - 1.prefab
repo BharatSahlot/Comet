@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 871246862074287489}
   - component: {fileID: 871246862074287488}
+  - component: {fileID: 2550870043461369922}
   - component: {fileID: 5720194295609195934}
   - component: {fileID: 97550443}
   - component: {fileID: 97550442}
@@ -87,6 +88,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!111 &2550870043461369922
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871246862074287491}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 34b9b2de303346344b85c5e445390620, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 34b9b2de303346344b85c5e445390620, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!60 &5720194295609195934
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -164,15 +181,15 @@ MonoBehaviour:
   trail: {fileID: 2239097577308826121}
   modifications:
   - probability: 0.3
-    type: 0
+    type: 1
   - probability: 0.3
-    type: 0
+    type: 2
   - probability: 0.2
-    type: 0
+    type: 3
   - probability: 0.15
-    type: 0
+    type: 4
   - probability: 0.05
-    type: 0
+    type: 5
   explosion: {fileID: 7937482838394766938, guid: 740352428581a2e4a86536b7455175e0, type: 3}
   offScreenIcon: {fileID: 5323392153539188187, guid: 98f50174e0e2bed41addb977a2bcb101, type: 3}
   screenBorder: 0.1

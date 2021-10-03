@@ -16,6 +16,8 @@ namespace Game
         [SerializeField] internal CosmicRaySpawner cosmicRaySpawner;
 
         [SerializeField] internal CinemachineVirtualCamera cinemachine;
+
+        [SerializeField] internal SlowMotionEffect slowMotionEffect;
         
         internal PlayerController PlayerController;
         internal Shield Shield;
@@ -40,6 +42,8 @@ namespace Game
             var playerTransform = PlayerController.transform;
             cinemachine.Follow = playerTransform;
             cinemachine.LookAt = playerTransform;
+
+            slowMotionEffect.PlayerController = PlayerController;
         }
     }
 }

@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bfdc048ac264d5bac7a1f4e2ed5ec08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 30
+  angle: 50
   deltaAngle: 10
   ringWidth: 0.624
   ringStart: 1.326

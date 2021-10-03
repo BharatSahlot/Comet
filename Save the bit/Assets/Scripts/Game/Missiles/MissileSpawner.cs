@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Missiles
@@ -10,7 +11,9 @@ namespace Game.Missiles
         [SerializeField] private MissileBasic prefab;
 
         internal GameObject Player;
-        
+
+        public IReadOnlyList<MissileBasic> ActiveMissiles => _pool.Active;
+
         private Pool<MissileBasic> _pool;
 
         private void Awake()

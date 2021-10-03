@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class Extensions
 {
@@ -14,5 +15,12 @@ public static class Extensions
     public static bool IsPartOfLayer<T>(this T go, string layer) where T : Behaviour
     {
         return go.gameObject.layer == LayerMask.NameToLayer(layer);
+    }
+
+    public static T GetRandom<T>(this IReadOnlyList<T> list)
+    {
+        if (list.Count == 0) return default;
+        var rand = Random.Range(0, list.Count);
+        return list[rand];
     }
 }
