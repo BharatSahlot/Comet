@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Game.Data;
 using Game.Player;
 using TMPro;
 using UnityEngine;
@@ -15,17 +16,18 @@ namespace Game
         [SerializeField] private float spawnDistance;
 
         internal PlayerController PlayerController;
+        internal DataManager DataManager;
 
-        private int _coinsCollected;
         private Pool<Coin> _pool;
 
         private void Start()
         {
             _pool = new Pool<Coin>(coinPrefab, 5);
+            coinText.SetText($"{DataManager.Coins}");
             PlayerController.CoinHit += () =>
             {
-                _coinsCollected++;
-                coinText.SetText($"{_coinsCollected}");
+                DataManager.Coins++;
+                coinText.SetText($"{DataManager.Coins}");
             };
             StartCoroutine(Spawn());
         }

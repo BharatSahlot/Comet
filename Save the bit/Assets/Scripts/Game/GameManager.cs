@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Game.Data;
 using Game.Missiles;
 using Game.Player;
 using UI;
@@ -8,10 +9,12 @@ namespace Game
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private DataManager dataManager;
         [SerializeField] private PlayerController playerPrefab;
         [SerializeField] private Shield shieldPrefab;
 
         [SerializeField] internal ModificationController modificationController;
+        [SerializeField] internal InputManager inputManager;
         
         [SerializeField] internal MissileSpawner missileSpawner;
         [SerializeField] internal CosmicRaySpawner cosmicRaySpawner;
@@ -30,12 +33,13 @@ namespace Game
         private void Awake()
         {
             PlayerController = Instantiate(playerPrefab);
+            PlayerController.InputManager = inputManager;
+            
             Shield = Instantiate(shieldPrefab);
 
             var shieldGo = Shield.gameObject;
             var playerGo = PlayerController.gameObject;
             
-            PlayerController.Shield = shieldGo;
             Shield.Player = playerGo;
             
             modificationController.PlayerController = PlayerController;
@@ -43,7 +47,9 @@ namespace Game
 
             missileSpawner.Player = playerGo;
             cosmicRaySpawner.Player = PlayerController;
+            
             coinManager.PlayerController = PlayerController;
+            coinManager.DataManager = dataManager;
 
             var playerTransform = PlayerController.transform;
             cinemachine.Follow = playerTransform;
@@ -51,6 +57,7 @@ namespace Game
 
             slowMotionEffect.PlayerController = PlayerController;
 
+            deadMenu.DataManager = dataManager;
             PlayerController.MissileHit += (controller, _) => deadMenu.Display();
         }
     }

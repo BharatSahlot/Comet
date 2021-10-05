@@ -15,7 +15,8 @@ namespace Game.Player
         public float minRayStrength = 10; // only rays above this strength can affect player
         [SerializeField] private RigidbodyController controller;
 
-        internal GameObject Shield;
+        internal InputManager InputManager;
+        
         private Rigidbody2D _rigidbody;
 
         internal float XMultiplier = 1, YMultiplier = 1;
@@ -28,6 +29,12 @@ namespace Game.Player
 
         private void FixedUpdate()
         {
+            if (InputManager == null)
+            {
+                controller.Update(Vector2.zero);
+                return;
+            }
+            
             var dir = InputManager.GetMoveDirection();
             dir.x *= XMultiplier;
             dir.y *= YMultiplier;

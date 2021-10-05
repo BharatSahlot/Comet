@@ -7643,6 +7643,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 70
+--- !u!1 &976023013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 976023015}
+  - component: {fileID: 976023014}
+  m_Layer: 0
+  m_Name: Data Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &976023014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976023013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5222d68c71374934ab05a259e284733d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &976023015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976023013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.4701967, y: -6.8374796, z: -0.15207857}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1055146652
 GameObject:
   m_ObjectHideFlags: 0
@@ -8080,14 +8123,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ac9106a3eb462b960381094b099e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataManager: {fileID: 976023014}
   playerPrefab: {fileID: 8477710885067131673, guid: 796d2e506b32bad41b9e669f5fc8f03c, type: 3}
   shieldPrefab: {fileID: 4912224091891586443, guid: f2c83b53d9359394486b0d21ac669e45, type: 3}
   modificationController: {fileID: 1137079793}
+  inputManager: {fileID: 663229218}
   missileSpawner: {fileID: 1137079792}
   cosmicRaySpawner: {fileID: 1137079790}
   coinManager: {fileID: 1137079795}
   cinemachine: {fileID: 1901662116}
   slowMotionEffect: {fileID: 2057502765}
+  deadMenu: {fileID: 1397941329}
 --- !u!114 &1137079795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8463,6 +8509,7 @@ GameObject:
   - component: {fileID: 1397941327}
   - component: {fileID: 1397941326}
   - component: {fileID: 1397941325}
+  - component: {fileID: 1397941329}
   m_Layer: 5
   m_Name: Dead Canvas
   m_TagString: Untagged
@@ -8561,6 +8608,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1397941329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397941324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52778021650a4af89c2f514b9fd114ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameCanvas: {fileID: 1526436567}
+  baseCoinText: {fileID: 143399491}
+  bonusCoinText: {fileID: 353791786}
+  totalCoinText: {fileID: 1101244834}
+  replayButton: {fileID: 585029625}
 --- !u!1 &1407469518
 GameObject:
   m_ObjectHideFlags: 0
