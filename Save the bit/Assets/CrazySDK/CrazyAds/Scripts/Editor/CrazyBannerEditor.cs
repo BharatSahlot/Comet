@@ -1,5 +1,4 @@
-﻿using CrazySDK.CrazyAds.Scripts;
-using UnityEditor;
+﻿using UnityEditor;
 
 [CustomEditor(typeof(CrazyBanner))]
 public class CrazyBannerEditor : Editor

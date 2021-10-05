@@ -98,9 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d80e20f982074427b4c6875b7ad88ab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minRayStrength: 10
   controller:
     speed: 100
-    smoothMoveRotation: 270
+    smoothMoveRotation: 330
     smoothLookRotation: 360
     rigidbody: {fileID: 0}
 --- !u!1 &8477710885720737762

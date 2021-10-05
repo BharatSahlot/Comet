@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace CrazySDK.CrazyLogo.Assets.Scripts
+namespace Crazy
 {
     [RequireComponent(typeof(Image))]
     public class RotateImg : MonoBehaviour

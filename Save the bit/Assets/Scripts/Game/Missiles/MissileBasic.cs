@@ -150,36 +150,8 @@ namespace Game.Missiles
             {
                 if(!_icon.activeSelf) _icon.SetActive(true);
             
-                var corners = new Vector3[4]
-                {
-                    _camera.ViewportToWorldPoint(new Vector3(0, 0, 0)),
-                    _camera.ViewportToWorldPoint(new Vector3(0, 1, 0)),
-                    _camera.ViewportToWorldPoint(new Vector3(1, 0, 0)),
-                    _camera.ViewportToWorldPoint(new Vector3(1, 1, 0)),
-                };
-            
-                float minX = float.MaxValue, maxX = float.MinValue;
-                float minY = float.MaxValue, maxY = float.MinValue;
-                foreach (var localCorner in corners)
-                {
-                    var corner = _camera.transform.TransformVector(localCorner);
-                    minX = Mathf.Min(minX, corner.x);
-                    minY = Mathf.Min(minY, corner.y);
-                    maxX = Mathf.Max(maxX, corner.x);
-                    maxY = Mathf.Max(maxY, corner.y);
-                }
-            
-                minX += screenBorder;
-                maxX -= screenBorder;
-                minY += screenBorder;
-                maxY -= screenBorder;
-            
-                var pos = transform.position;
-                pos.x = Mathf.Clamp(pos.x, minX, maxX);
-                pos.y = Mathf.Clamp(pos.y, minY, maxY);
-                _icon.transform.position = pos;
-            
-                _icon.transform.up = (_player.transform.position - pos).normalized;
+                _icon.transform.position = Utility.WorldPosToBorder(transform.position, screenBorder);
+                _icon.transform.up = (_player.transform.position - _icon.transform.position).normalized;
             }
             else
             {

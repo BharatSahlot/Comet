@@ -1,174 +1,173 @@
 ﻿// ReSharper disable once RedundantUsingDirective
-
+using System;
+// ReSharper disable once RedundantUsingDirective
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using CrazySDK.Script;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI; // ReSharper disable once RedundantUsingDirective
+using UnityEngine.UI;
 
-namespace CrazySDK.CrazyAds.Scripts
+public class CrazyAds : Singleton<CrazyAds>
 {
-    public class CrazyAds : Singleton<CrazyAds>
+    public delegate void AdBreakCompletedCallback();
+
+    private AdBreakCompletedCallback onCompletedAdBreak;
+
+    public delegate void AdErrorCallback();
+
+    private AdErrorCallback onAdError;
+
+    private bool _isRunningAd;
+    private bool origRunInBackground;
+    private float origTimeScale;
+    private List<CrazyBanner> banners;
+
+    private void Awake()
     {
-        public delegate void AdBreakCompletedCallback();
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.adError, ev => AdError(((AdErrorEvent) ev).error));
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.adFinished, ev => AdFinished());
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.adStarted, ev => AdStarted());
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerError,
+            ev => BannerError(((BannerErrorEvent) ev).error));
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerRendered,
+            ev => BannerRendered(((BannerRenderedEvent) ev).id));
+        banners = new List<CrazyBanner>();
+    }
 
-        private AdBreakCompletedCallback onCompletedAdBreak;
+    #region adbreak
 
-        public delegate void AdErrorCallback();
-
-        private AdErrorCallback onAdError;
-
-        private bool _isRunningAd;
-        private bool origRunInBackground;
-        private float origTimeScale;
-        private List<CrazyBanner> banners;
-
-        private void Awake()
+    private bool IsRunningAd
+    {
+        get { return _isRunningAd; }
+        set
         {
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.adError, ev => AdError(((AdErrorEvent) ev).error));
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.adFinished, ev => AdFinished());
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.adStarted, ev => AdStarted());
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerError,
-                ev => BannerError(((BannerErrorEvent) ev).error));
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerRendered,
-                ev => BannerRendered(((BannerRenderedEvent) ev).id));
-            banners = new List<CrazyBanner>();
+            _isRunningAd = value;
+
+            var options = FindObjectOfType<CrazyAdsOptions>();
+            AudioListener.volume = _isRunningAd ? 0 : 1;
+
+            if (options)
+                foreach (var obj in options.activeDuringAdObjs)
+                    obj.SetActive(_isRunningAd);
+
+            if (!options || options.freezeTimeDuringBreak)
+                Time.timeScale = _isRunningAd ? 0 : origTimeScale;
+
+            Application.runInBackground = _isRunningAd || origRunInBackground;
         }
+    }
 
-        #region adbreak
+    public void beginAdBreakRewarded(AdBreakCompletedCallback completedCallback = null,
+        AdErrorCallback errorCallback = null)
+    {
+        beginAdBreak(completedCallback, errorCallback, CrazyAdType.rewarded);
+    }
 
-        private bool IsRunningAd
-        {
-            get { return _isRunningAd; }
-            set
-            {
-                _isRunningAd = value;
+    public void beginAdBreak(AdBreakCompletedCallback completedCallback = null, AdErrorCallback errorCallback = null,
+        CrazyAdType adType = CrazyAdType.midgame)
+    {
+        CrazySDK.Instance.DebugLog("Requesting CrazyAd Type: " + adType);
 
-                var options = FindObjectOfType<CrazyAdsOptions>();
-                AudioListener.volume = _isRunningAd ? 0 : 1;
-
-                if (options)
-                    foreach (var obj in options.activeDuringAdObjs)
-                        obj.SetActive(_isRunningAd);
-
-                if (!options || options.freezeTimeDuringBreak)
-                    Time.timeScale = _isRunningAd ? 0 : origTimeScale;
-
-                Application.runInBackground = _isRunningAd || origRunInBackground;
-            }
-        }
-
-        public void beginAdBreakRewarded(AdBreakCompletedCallback completedCallback = null,
-            AdErrorCallback errorCallback = null)
-        {
-            beginAdBreak(completedCallback, errorCallback, CrazyAdType.rewarded);
-        }
-
-        public void beginAdBreak(AdBreakCompletedCallback completedCallback = null, AdErrorCallback errorCallback = null,
-            CrazyAdType adType = CrazyAdType.midgame)
-        {
-            Script.CrazySDK.Instance.DebugLog("Requesting CrazyAd Type: " + adType);
-
-            origTimeScale = Time.timeScale;
-            origRunInBackground = Application.runInBackground;
-            onCompletedAdBreak = completedCallback;
-            onAdError = errorCallback;
-            IsRunningAd = true;
+        origTimeScale = Time.timeScale;
+        origRunInBackground = Application.runInBackground;
+        onCompletedAdBreak = completedCallback;
+        onAdError = errorCallback;
+        IsRunningAd = true;
 
 #if UNITY_EDITOR
-            SimulateAdBreak();
+        SimulateAdBreak();
 #else
         CrazySDK.Instance.RequestAd(adType);
 #endif
-        }
+    }
 
 #if UNITY_EDITOR
-        private IEnumerator InvokeRealtimeCoroutine(UnityAction action, float seconds)
-        {
-            yield return new WaitForSecondsRealtime(seconds);
-            action();
-        }
+    private IEnumerator InvokeRealtimeCoroutine(UnityAction action, float seconds)
+    {
+        yield return new WaitForSecondsRealtime(seconds);
+        action();
+    }
 
-        private void SimulateAdBreak()
-        {
-            Debug.Log("CrazyAds: simulating ad request because we are in Editor .. game will resume in 3 seconds ..");
-            var simulationPanel = new GameObject("Simulation Panel");
+    private void SimulateAdBreak()
+    {
+        Debug.Log("CrazyAds: simulating ad request because we are in Editor .. game will resume in 3 seconds ..");
+        var simulationPanel = new GameObject("Simulation Panel");
 
-            simulationPanel.AddComponent<Canvas>();
-            var canvas = simulationPanel.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 9999;
+        simulationPanel.AddComponent<Canvas>();
+        var canvas = simulationPanel.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 9999;
 
-            simulationPanel.AddComponent<Image>();
-            var background = simulationPanel.GetComponent<Image>();
-            background.color = new Color32(46, 37, 68, 255);
+        simulationPanel.AddComponent<Image>();
+        var background = simulationPanel.GetComponent<Image>();
+        background.color = new Color32(46, 37, 68, 255);
 
-            var panelText = new GameObject();
-            panelText.AddComponent<Text>();
-            ((RectTransform) panelText.transform).sizeDelta = new Vector2(500, 100);
-            ((RectTransform) panelText.transform).position = new Vector2(Screen.width / 2, Screen.height / 2);
-            var text = panelText.GetComponent<Text>();
-            text.text = "Ad simulation the game will resume in 3 seconds";
-            text.fontSize = 20;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        var panelText = new GameObject();
+        panelText.AddComponent<Text>();
+        ((RectTransform) panelText.transform).sizeDelta = new Vector2(500, 100);
+        ((RectTransform) panelText.transform).position = new Vector2(Screen.width / 2, Screen.height / 2);
+        var text = panelText.GetComponent<Text>();
+        text.text = "Ad simulation the game will resume in 3 seconds";
+        text.fontSize = 20;
+        text.alignment = TextAnchor.MiddleCenter;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-            panelText.transform.parent = simulationPanel.transform;
-            simulationPanel.transform.parent = transform;
+        panelText.transform.parent = simulationPanel.transform;
+        simulationPanel.transform.parent = transform;
 
-            AdStarted();
-            StartCoroutine(InvokeRealtimeCoroutine(EndSimulation, 3));
-        }
+        AdStarted();
+        StartCoroutine(InvokeRealtimeCoroutine(EndSimulation, 3));
+    }
 
-        private void EndSimulation()
-        {
-            DestroyImmediate(GameObject.Find("Simulation Panel"));
-            completedAdRequest();
-        }
+    private void EndSimulation()
+    {
+        DestroyImmediate(GameObject.Find("Simulation Panel"));
+        completedAdRequest();
+    }
 #endif
 
-        private void completedAdRequest()
-        {
-            completedAdRequest(CrazySDKEvent.adCompleted);
-        }
+    private void completedAdRequest()
+    {
+        completedAdRequest(CrazySDKEvent.adCompleted);
+    }
 
-        private void completedAdRequest(CrazySDKEvent e)
-        {
-            Script.CrazySDK.Instance.DebugLog("Ad Finished");
+    private void completedAdRequest(CrazySDKEvent e)
+    {
+        CrazySDK.Instance.DebugLog("Ad Finished");
 
-            IsRunningAd = false;
+        IsRunningAd = false;
 
-            if (e == CrazySDKEvent.adError && onAdError != null) onAdError.Invoke();
-            else if (onCompletedAdBreak != null) onCompletedAdBreak.Invoke();
-        }
+        if (e == CrazySDKEvent.adError && onAdError != null) onAdError.Invoke();
+        else if (onCompletedAdBreak != null) onCompletedAdBreak.Invoke();
+    }
 
-        private void AdError(string error)
-        {
-            Script.CrazySDK.Instance.DebugLog("Ad Error: " + error);
-            completedAdRequest(CrazySDKEvent.adError);
-        }
+    private void AdError(string error)
+    {
+        CrazySDK.Instance.DebugLog("Ad Error: " + error);
+        completedAdRequest(CrazySDKEvent.adError);
+    }
 
-        private void AdFinished()
-        {
-            Script.CrazySDK.Instance.DebugLog("Ad Finished");
-            completedAdRequest(CrazySDKEvent.adFinished);
-        }
+    private void AdFinished()
+    {
+        CrazySDK.Instance.DebugLog("Ad Finished");
+        completedAdRequest(CrazySDKEvent.adFinished);
+    }
 
-        private void AdStarted()
-        {
-            Script.CrazySDK.Instance.DebugLog("Ad Started");
-            IsRunningAd = true;
-        }
+    private void AdStarted()
+    {
+        CrazySDK.Instance.DebugLog("Ad Started");
+        IsRunningAd = true;
+    }
 
-        #endregion
+    #endregion
 
-        #region Banners
+    #region Banners
 
-        public void updateBannersDisplay()
-        {
+    public void updateBannersDisplay()
+    {
 #if UNITY_EDITOR
-            foreach (var banner in banners) banner.SimulateRender();
+        foreach (var banner in banners) banner.SimulateRender();
 #else
         var visibleBanners = banners.Where(b => b.isVisible()).Select((crazyBanner) =>
         {
@@ -207,51 +206,50 @@ namespace CrazySDK.CrazyAds.Scripts
         }).ToArray();
         CrazySDK.Instance.RequestBanners(visibleBanners);
 #endif
-        }
-
-        public void registerBanner(CrazyBanner banner)
-        {
-            if (!banners.Contains(banner))
-                banners.Add(banner);
-        }
-    
-        public void unregisterBanner(CrazyBanner banner)
-        {
-            banners.Remove(banner);
-        }
-
-        public delegate void BannerRenderedCallback(string id);
-
-        public void listenToBannerRendered(BannerRenderedCallback callback)
-        {
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerRendered, ev =>
-            {
-                var renderedEv = (BannerRenderedEvent) ev;
-                callback(renderedEv.id);
-            });
-        }
-
-        public delegate void BannerErrorCallback(string id, string error);
-
-        public void listenToBannerError(BannerErrorCallback callback)
-        {
-            Script.CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerError, ev =>
-            {
-                var errorEv = (BannerErrorEvent) ev;
-                callback(errorEv.id, errorEv.error);
-            });
-        }
-
-        private void BannerError(string error)
-        {
-            Script.CrazySDK.Instance.DebugLog("Banner error: " + error);
-        }
-
-        private void BannerRendered(string id)
-        {
-            Script.CrazySDK.Instance.DebugLog("Banner with id " + id + " successfully rendered");
-        }
-
-        #endregion
     }
+
+    public void registerBanner(CrazyBanner banner)
+    {
+        if (!banners.Contains(banner))
+            banners.Add(banner);
+    }
+    
+    public void unregisterBanner(CrazyBanner banner)
+    {
+        banners.Remove(banner);
+    }
+
+    public delegate void BannerRenderedCallback(string id);
+
+    public void listenToBannerRendered(BannerRenderedCallback callback)
+    {
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerRendered, ev =>
+        {
+            var renderedEv = (BannerRenderedEvent) ev;
+            callback(renderedEv.id);
+        });
+    }
+
+    public delegate void BannerErrorCallback(string id, string error);
+
+    public void listenToBannerError(BannerErrorCallback callback)
+    {
+        CrazySDK.Instance.AddEventListener(CrazySDKEvent.inGameBannerError, ev =>
+        {
+            var errorEv = (BannerErrorEvent) ev;
+            callback(errorEv.id, errorEv.error);
+        });
+    }
+
+    private void BannerError(string error)
+    {
+        CrazySDK.Instance.DebugLog("Banner error: " + error);
+    }
+
+    private void BannerRendered(string id)
+    {
+        CrazySDK.Instance.DebugLog("Banner with id " + id + " successfully rendered");
+    }
+
+    #endregion
 }

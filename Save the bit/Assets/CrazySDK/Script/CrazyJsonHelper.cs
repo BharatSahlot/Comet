@@ -1,26 +1,23 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CrazySDK.Script
+public static class CrazyJsonHelper
 {
-    public static class CrazyJsonHelper
+    public static string ToJson<T>(T[] array)
     {
-        public static string ToJson<T>(T[] array)
-        {
-            var wrapper = new Wrapper<T>();
-            wrapper.Items = array;
-            return FixJson(JsonUtility.ToJson(wrapper));
-        }
+        var wrapper = new Wrapper<T>();
+        wrapper.Items = array;
+        return FixJson(JsonUtility.ToJson(wrapper));
+    }
 
-        private static string FixJson(string value)
-        {
-            return value.Substring(9, value.Length - 10);
-        }
+    private static string FixJson(string value)
+    {
+        return value.Substring(9, value.Length - 10);
+    }
 
-        [Serializable]
-        private class Wrapper<T>
-        {
-            public T[] Items;
-        }
+    [Serializable]
+    private class Wrapper<T>
+    {
+        public T[] Items;
     }
 }

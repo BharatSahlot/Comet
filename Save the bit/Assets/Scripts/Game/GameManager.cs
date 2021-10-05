@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using Game.Missiles;
 using Game.Player;
+using UI;
 using UnityEngine;
 
 namespace Game
@@ -14,10 +15,14 @@ namespace Game
         
         [SerializeField] internal MissileSpawner missileSpawner;
         [SerializeField] internal CosmicRaySpawner cosmicRaySpawner;
+        [SerializeField] internal CoinManager coinManager;
 
         [SerializeField] internal CinemachineVirtualCamera cinemachine;
 
         [SerializeField] internal SlowMotionEffect slowMotionEffect;
+
+        [SerializeField] internal DeadMenu deadMenu;
+
         
         internal PlayerController PlayerController;
         internal Shield Shield;
@@ -38,12 +43,15 @@ namespace Game
 
             missileSpawner.Player = playerGo;
             cosmicRaySpawner.Player = PlayerController;
+            coinManager.PlayerController = PlayerController;
 
             var playerTransform = PlayerController.transform;
             cinemachine.Follow = playerTransform;
             cinemachine.LookAt = playerTransform;
 
             slowMotionEffect.PlayerController = PlayerController;
+
+            PlayerController.MissileHit += (controller, _) => deadMenu.Display();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Game.Player
     {
         public event Action<PlayerController, CosmicRay> CosmicRayHit;
         public event Action<PlayerController, MissileBasic> MissileHit;
+        public event Action CoinHit;
 
         public Vector3 Velocity => _rigidbody.velocity;
 
@@ -45,6 +46,9 @@ namespace Game.Player
             } else if (other.IsPartOfLayer("Missile"))
             {
                 OnMissileHit(this, other.GetComponent<MissileBasic>());
+            } else if (other.IsPartOfLayer("Coin"))
+            {
+                OnCoinHit();
             }
         }
 
@@ -62,6 +66,11 @@ namespace Game.Player
         private void OnMissileHit(PlayerController arg1, MissileBasic arg2)
         {
             MissileHit?.Invoke(arg1, arg2);
+        }
+
+        private void OnCoinHit()
+        {
+            CoinHit?.Invoke();
         }
     }
 }
