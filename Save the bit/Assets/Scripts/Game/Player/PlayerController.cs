@@ -16,6 +16,7 @@ namespace Game.Player
         [SerializeField] private RigidbodyController controller;
 
         internal InputManager InputManager;
+        internal Explosion DeadExplosion;
         
         private Rigidbody2D _rigidbody;
 
@@ -52,6 +53,7 @@ namespace Game.Player
                 }
             } else if (other.IsPartOfLayer("Missile"))
             {
+                DeadExplosion.ExplodeAt(transform.position);
                 OnMissileHit(this, other.GetComponent<MissileBasic>());
             } else if (other.IsPartOfLayer("Coin"))
             {

@@ -21,6 +21,26 @@ namespace Game.Data
             }
         }
 
+        public int CoinsCollected
+        {
+            get => _gameData.coinsCollected;
+            set
+            {
+                _gameData.coinsCollected = value;
+                Save(_gameData);
+            }
+        }
+        
+        public int BaseCoins
+        {
+            get => _gameData.baseCoins;
+            set
+            {
+                _gameData.baseCoins = value;
+                Save(_gameData);
+            }
+        }
+        
         private void Start()
         {
             _gameData = Load();
@@ -45,6 +65,9 @@ namespace Game.Data
                 writer.Write(data.shieldsBought.Count);
                 foreach (var i in data.shieldsBought) writer.Write(i);
             } else writer.Write(0);
+            
+            writer.Write(data.baseCoins);
+            writer.Write(data.coinsCollected);
             
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
@@ -79,6 +102,9 @@ namespace Game.Data
                 {
                     data.shieldsBought.Add(reader.ReadInt32());
                 }
+
+                data.coinsCollected = reader.ReadInt32();
+                data.baseCoins = reader.ReadInt32();
             }
             catch
             {

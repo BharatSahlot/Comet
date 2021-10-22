@@ -28,6 +28,12 @@ namespace Game.Player
                 _transitioning = true;
                 _elapsed = 0;
             };
+            
+            PlayerController.MissileHit += (controller, ray) =>
+            {
+                _transitioning = true;
+                _elapsed = 0;
+            };
         }
 
         private void Update()

@@ -12,5 +12,9 @@ namespace Game.Data
 
         public List<int> planesBought;
         public List<int> shieldsBought;
+
+        // last / current play data
+        public int coinsCollected;
+        public int baseCoins;
     }
 }

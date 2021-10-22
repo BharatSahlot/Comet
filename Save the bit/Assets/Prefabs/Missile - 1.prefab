@@ -174,8 +174,8 @@ MonoBehaviour:
   randomLifeTimeDelta: 1
   dieAnimationTime: 1
   controller:
-    speed: 150
-    smoothMoveRotation: 120
+    speed: 160
+    smoothMoveRotation: 200
     smoothLookRotation: 240
     rigidbody: {fileID: 0}
   trail: {fileID: 2239097577308826121}

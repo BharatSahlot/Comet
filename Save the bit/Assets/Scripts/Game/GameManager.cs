@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
 using Game.Data;
 using Game.Missiles;
 using Game.Player;
@@ -25,15 +26,18 @@ namespace Game
         [SerializeField] internal SlowMotionEffect slowMotionEffect;
 
         [SerializeField] internal DeadMenu deadMenu;
+        [SerializeField] internal Explosion deadExplosion;
 
-        
         internal PlayerController PlayerController;
         internal Shield Shield;
+
+        private float _playStartTime;
 
         private void Awake()
         {
             PlayerController = Instantiate(playerPrefab);
             PlayerController.InputManager = inputManager;
+            PlayerController.DeadExplosion = deadExplosion;
             
             Shield = Instantiate(shieldPrefab);
 
@@ -58,7 +62,47 @@ namespace Game
             slowMotionEffect.PlayerController = PlayerController;
 
             deadMenu.DataManager = dataManager;
-            PlayerController.MissileHit += (controller, _) => deadMenu.Display();
+
+            // if there are not zero that means the game crashed midway, find better way to display this
+            dataManager.CoinsCollected = 0;
+            dataManager.BaseCoins = 0;
+            
+            PlayerController.MissileHit += (controller, _) =>
+            {
+                Destroy(PlayerController.gameObject);
+                Destroy(Shield.gameObject);
+
+                dataManager.BaseCoins = Mathf.FloorToInt(Time.time - _playStartTime);
+                dataManager.Coins += dataManager.CoinsCollected + dataManager.BaseCoins;
+                deadMenu.Display();
+                
+                dataManager.CoinsCollected = 0;
+                dataManager.BaseCoins = 0;
+                PlayerController = null;
+                Shield = null;
+            };
+        }
+
+        private void Start()
+        {
+            _playStartTime = Time.time;
+        }
+
+        private void OnDestroy()
+        {
+            dataManager = null;
+            playerPrefab = null;
+            shieldPrefab = null;
+            modificationController = null;
+            inputManager = null;
+            missileSpawner = null;
+            cosmicRaySpawner = null;
+            coinManager = null;
+            cinemachine = null;
+            slowMotionEffect = null;
+            deadMenu = null;
+            PlayerController = null;
+            Shield = null;
         }
     }
 }

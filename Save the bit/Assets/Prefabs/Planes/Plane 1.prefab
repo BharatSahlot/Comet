@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8477710885067131669}
   - component: {fileID: 8477710885067131673}
   m_Layer: 8
-  m_Name: Player
+  m_Name: Plane 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,12 +80,19 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.91630477, y: 3.177288}
-      - {x: -0.9887471, y: 3.113299}
-      - {x: -2.016668, y: 0.70614886}
-      - {x: -0.46639657, y: -2.218468}
-      - {x: 0.6547976, y: -2.3072062}
-      - {x: 1.7540548, y: 0.62117153}
+    - - {x: 0.6916854, y: 0.14074725}
+      - {x: 2.629502, y: 0.5645035}
+      - {x: 2.7011983, y: 1.5457664}
+      - {x: 0.71025693, y: 1.6715539}
+      - {x: -0.04175261, y: 2.4955063}
+      - {x: -0.6717505, y: 1.6392637}
+      - {x: -2.6999433, y: 1.4475539}
+      - {x: -2.718791, y: 0.56969243}
+      - {x: -0.6488598, y: 0.08710086}
+      - {x: -0.38413513, y: -2.13097}
+      - {x: -1.1532099, y: -2.6834998}
+      - {x: 1.1883906, y: -2.6824484}
+      - {x: 0.24832058, y: -2.152548}
 --- !u!114 &8477710885067131673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +108,7 @@ MonoBehaviour:
   minRayStrength: 10
   controller:
     speed: 100
-    smoothMoveRotation: 330
+    smoothMoveRotation: 310
     smoothLookRotation: 360
     rigidbody: {fileID: 0}
 --- !u!1 &8477710885720737762
@@ -129,7 +136,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8477710885720737762}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.3199997, y: 0.40000036, z: 0}
+  m_LocalPosition: {x: -1.91, y: 0.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8477710885919628344}
@@ -268,7 +275,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8477710885864942059}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.2699995, y: 0.40000036, z: 0}
+  m_LocalPosition: {x: 1.84, y: 0.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8477710885919628344}
@@ -408,7 +415,7 @@ Transform:
   m_GameObject: {fileID: 8477710885919628351}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 8477710885864942052}
   - {fileID: 8477710885720737763}
@@ -456,8 +463,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 864b71f3240895e49b14f46b984bfc26, type: 3}
-  m_Color: {r: 0.8396226, g: 0.69815457, b: 0.29703632, a: 1}
+  m_Sprite: {fileID: 21300000, guid: b083415aab5e4d84aa75e8e8ea11a34d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

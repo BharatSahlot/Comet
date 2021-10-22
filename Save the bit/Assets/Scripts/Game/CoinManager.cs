@@ -23,11 +23,11 @@ namespace Game
         private void Start()
         {
             _pool = new Pool<Coin>(coinPrefab, 5);
-            coinText.SetText($"{DataManager.Coins}");
+            coinText.SetText($"{DataManager.CoinsCollected}");
             PlayerController.CoinHit += () =>
             {
-                DataManager.Coins++;
-                coinText.SetText($"{DataManager.Coins}");
+                DataManager.CoinsCollected++;
+                coinText.SetText($"{DataManager.CoinsCollected}");
             };
             StartCoroutine(Spawn());
         }
@@ -36,6 +36,8 @@ namespace Game
         {
             while (true)
             {
+                if (PlayerController == null) break;
+                
                 var position = PlayerController.transform.position.xy() + Random.insideUnitCircle.normalized * spawnDistance;
                 var coin = _pool.Borrow(false);
                 coin.transform.position = position;

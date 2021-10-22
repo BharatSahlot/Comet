@@ -1,6 +1,7 @@
 ﻿using System;
 using Game.Data;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -31,10 +32,15 @@ namespace UI
 
         public void Display()
         {
-            baseCoinText.SetText("+0");
-            bonusCoinText.SetText($"+{DataManager.Coins}");
-            totalCoinText.SetText($"{DataManager.Coins}");
+            int baseCoins = Mathf.FloorToInt(DataManager.BaseCoins);
+            int coinsCollected = DataManager.CoinsCollected;
+            int total = baseCoins + coinsCollected;
             
+            baseCoinText.SetText($"+{baseCoins}");
+            bonusCoinText.SetText($"+{coinsCollected}");
+            totalCoinText.SetText($"{total}");
+            
+            gameCanvas.SetActive(false);
             gameObject.SetActive(true);
         }
     }

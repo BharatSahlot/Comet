@@ -72,9 +72,10 @@ namespace Game
             if (!_dead && !_renderer.isVisible && Player != null)
             {
                 if(!_icon.activeSelf) _icon.SetActive(true);
-            
-                _icon.transform.position = Utility.WorldPosToBorder(transform.position, screenBorder);
-                _icon.transform.up = (Player.transform.position - _icon.transform.position).normalized;
+
+                var position = transform.position;
+                _icon.transform.position = Utility.WorldPosToBorder(position, screenBorder);
+                _icon.transform.up = (position - Player.transform.position).normalized;
             }
             else
             {
