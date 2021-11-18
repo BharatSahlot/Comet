@@ -80,20 +80,19 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.7250794, y: 2.2726536}
-      - {x: 0.25351512, y: 3.2216613}
-      - {x: -0.20742705, y: 3.2636588}
-      - {x: -0.7287778, y: 2.2171736}
-      - {x: -3.399868, y: -0.48315302}
-      - {x: -3.326404, y: -1.235879}
+    - - {x: 0.6106004, y: 1.9482962}
+      - {x: 0.04363659, y: 2.916383}
+      - {x: -0.5952188, y: 2.0454555}
+      - {x: -3.1709101, y: -0.54039264}
+      - {x: -3.2500844, y: -1.1977185}
       - {x: -0.5160539, y: -0.35485366}
-      - {x: -0.13314259, y: -1.665456}
-      - {x: -1.417436, y: -2.738327}
-      - {x: 1.4062685, y: -2.721771}
-      - {x: 0.1931357, y: -1.6520813}
+      - {x: -0.17130229, y: -1.2838581}
+      - {x: -1.3411165, y: -2.356729}
+      - {x: 1.2917895, y: -2.435573}
+      - {x: 0.26945513, y: -1.2514049}
       - {x: 0.6033109, y: -0.19605914}
-      - {x: 3.631269, y: -1.3744253}
-      - {x: 3.6551373, y: -0.65899503}
+      - {x: 3.3450708, y: -1.1645471}
+      - {x: 3.3689394, y: -0.7734743}
 --- !u!114 &8477710885067131673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,8 +107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minRayStrength: 10
   controller:
-    speed: 120
-    smoothMoveRotation: 310
+    speed: 150
+    smoothMoveRotation: 275
     smoothLookRotation: 360
     rigidbody: {fileID: 0}
 --- !u!1 &8477710885720737762
@@ -194,21 +193,21 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0.0028554983
-        value: 0.07606072
-        inSlope: -0.66961956
-        outSlope: -0.66961956
+        value: 0.15259133
+        inSlope: 0.09836551
+        outSlope: 0.09836551
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.1995624
+        outWeight: 0.15058586
       - serializedVersion: 3
-        time: 0.7234637
-        value: 0.0125786215
-        inSlope: 0
-        outSlope: 0
+        time: 0.8464336
+        value: 0
+        inSlope: -0.27208713
+        outSlope: -0.27208713
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.17004475
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -333,21 +332,21 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0.0028554983
-        value: 0.07606072
-        inSlope: -0.66961956
-        outSlope: -0.66961956
+        value: 0.15259133
+        inSlope: 0.09836551
+        outSlope: 0.09836551
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.1995624
+        outWeight: 0.15058586
       - serializedVersion: 3
-        time: 0.7234637
-        value: 0.0125786215
-        inSlope: 0
-        outSlope: 0
+        time: 0.8464336
+        value: 0
+        inSlope: -0.27208713
+        outSlope: -0.27208713
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.17004475
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -415,8 +414,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8477710885919628351}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.000000020986038, y: 0, z: 0}
-  m_LocalScale: {x: 1.593134, y: 1.593134, z: 1.0611062}
+  m_LocalPosition: {x: 0.000000013990691, y: 0, z: 0}
+  m_LocalScale: {x: 1.4099237, y: 1.4099237, z: 0.93897283}
   m_Children:
   - {fileID: 8477710885864942052}
   - {fileID: 8477710885720737763}

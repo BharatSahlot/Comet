@@ -28,6 +28,7 @@ namespace Game.Missiles
 
         private IEnumerator Spawn()
         {
+            yield return new WaitForSeconds(spawnDelay);
             while (true)
             {
                 if (Player == null) break;

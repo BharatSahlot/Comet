@@ -9,44 +9,122 @@ namespace Game.Data
     {
         private static string FileName => $"{Application.persistentDataPath}/GameData.dat";
 
-        private GameData _gameData;
+        private SaveData _saveData;
+
+        [SerializeField] internal GameData gameData;
 
         public int Coins
         {
-            get => _gameData.coins;
+            get => _saveData.coins;
             set
             {
-                _gameData.coins = value;
-                Save(_gameData);
+                _saveData.coins = value;
+                Save(_saveData);
             }
         }
 
         public int CoinsCollected
         {
-            get => _gameData.coinsCollected;
+            get => _saveData.coinsCollected;
             set
             {
-                _gameData.coinsCollected = value;
-                Save(_gameData);
+                _saveData.coinsCollected = value;
+                Save(_saveData);
             }
         }
         
-        public int BaseCoins
+        public int TimeCoins
         {
-            get => _gameData.baseCoins;
+            get => _saveData.timeCoins;
             set
             {
-                _gameData.baseCoins = value;
-                Save(_gameData);
+                _saveData.timeCoins = value;
+                Save(_saveData);
+            }
+        }
+
+        public int EquippedPlane
+        {
+            get => _saveData.planeIndex;
+            set
+            {
+                _saveData.planeIndex = value;
+                Save(_saveData);
             }
         }
         
-        private void Start()
+        public int EquippedShield
         {
-            _gameData = Load();
+            get => _saveData.shieldIndex;
+            set
+            {
+                _saveData.shieldIndex = value;
+                Save(_saveData);
+            }
+        }
+
+        public bool HasBoughtPlane(int i)
+        {
+            return _saveData.planesBought.Contains(i);
         }
         
-        public static void Save(GameData data)
+        public bool HasBoughtShield(int i)
+        {
+            return _saveData.shieldsBought.Contains(i);
+        }
+
+        public bool TryBuyPlane(int index, bool equip = true)
+        {
+            if (HasBoughtPlane(index))
+            {
+                if(equip) EquippedPlane = index;
+                Save(_saveData);
+                return true;
+            }
+            
+            var cost = gameData.planes[index].cost;
+            if (cost > Coins) return false;
+
+            _saveData.coins -= cost;
+            _saveData.planesBought.Add(index);
+
+            if (equip)
+            {
+                _saveData.planeIndex = index;
+            }
+            Save(_saveData);
+            return true;
+        }
+        
+        public bool TryBuyShield(int index, bool equip = true)
+        {
+            if (HasBoughtShield(index))
+            {
+                if(equip) EquippedShield = index;
+                Save(_saveData);
+                return true;
+            }
+            
+            var cost = gameData.shields[index].cost;
+            if (cost > Coins) return false;
+
+            _saveData.coins -= cost;
+            _saveData.shieldsBought.Add(index);
+
+            if (equip)
+            {
+                _saveData.shieldIndex = index;
+            }
+            Save(_saveData);
+            return true;
+        }
+        
+        private void Awake()
+        {
+            _saveData = Load();
+        }
+        
+        public static void Save(SaveData data)
         {
             using var writer = new BinaryWriter(File.Open(FileName, FileMode.Create, FileAccess.Write));
             
@@ -66,7 +144,7 @@ namespace Game.Data
                 foreach (var i in data.shieldsBought) writer.Write(i);
             } else writer.Write(0);
             
-            writer.Write(data.baseCoins);
+            writer.Write(data.timeCoins);
             writer.Write(data.coinsCollected);
             
             if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -75,14 +153,18 @@ namespace Game.Data
             }
         }
 
-        public static GameData Load()
+        public static SaveData Load()
         {
-            if (!File.Exists(FileName)) return new GameData();
+            if (!File.Exists(FileName)) return new SaveData()
+            {
+                planesBought = new List<int>() { 0 },
+                shieldsBought = new List<int>() { 0 }
+            };
             
             using var reader = new BinaryReader(File.Open(FileName, FileMode.Open, FileAccess.Read));
             
             // ReSharper disable once UseObjectOrCollectionInitializer
-            var data = new GameData();
+            var data = new SaveData();
             try
             {
                 data.coins = reader.ReadInt32();
@@ -104,12 +186,12 @@ namespace Game.Data
                 }
 
                 data.coinsCollected = reader.ReadInt32();
-                data.baseCoins = reader.ReadInt32();
+                data.timeCoins = reader.ReadInt32();
             }
             catch
             {
-                data.planesBought = new List<int>();
-                data.shieldsBought = new List<int>();
+                data.planesBought = new List<int>() { 0 };
+                data.shieldsBought = new List<int>() { 0 };
             }
 
             return data;

@@ -17,10 +17,23 @@ public static class Extensions
         return go.gameObject.layer == LayerMask.NameToLayer(layer);
     }
 
-    public static T GetRandom<T>(this IReadOnlyList<T> list)
+    public static T SelectRandom<T>(this IReadOnlyList<T> list)
     {
         if (list.Count == 0) return default;
         var rand = Random.Range(0, list.Count);
         return list[rand];
+    }
+    
+    public static T SelectRandomP<T>(this IReadOnlyList<(float probablity, T obj)> list)
+    {
+        float random = Random.Range(0f, 1f);
+        float sum = 0;
+        foreach (var tuple in list)
+        {
+            sum += tuple.probablity;
+            if (sum >= random) return tuple.obj;
+        }
+
+        return default;
     }
 }

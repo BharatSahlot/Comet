@@ -12,10 +12,12 @@ namespace Clouds
 
         private Bounds _bounds;
         private readonly List<Tile> _tiles = new List<Tile>();
-        
+        private Camera _camera;
+
         private void Awake()
         {
-            tileSettings.bounds = _bounds = Utility.GetScreenBounds(0);
+            _camera = Camera.main;
+            tileSettings.bounds = _bounds = Utility.GetScreenBounds(0, _camera);
 
             var indexes = GetTileIndexes(_bounds.center);
             foreach (var index in indexes)
@@ -36,7 +38,7 @@ namespace Clouds
             if (_frame != updateGap) return;
             _frame = 0;
             
-            var bounds = Utility.GetScreenBounds(0);
+            var bounds = Utility.GetScreenBounds(0, _camera);
             if (_bounds.Contains(bounds.center)) return;
 
             _bounds = bounds;
@@ -45,17 +47,19 @@ namespace Clouds
 
         private void UpdateTiles()
         {
-            var tiles = GetTileIndexes(Utility.GetScreenBounds(0).center);
+            var tiles = GetTileIndexes(Utility.GetScreenBounds(0, _camera).center);
             var indexes = new Queue<Vector2Int>();
             foreach (var index in tiles)
             {
                 if(!_tiles.Exists(t => t.Index == index)) indexes.Enqueue(index);
             }
+            
+            var extents = _bounds.extents.xy();
             foreach (var tile in _tiles)
             {
                 if (tiles.Contains(tile.Index)) continue;
                 tile.Index = indexes.Dequeue();
-                tile.Generate(TileIndexToWorldPosition(tile.Index));
+                tile.Generate(TileIndexToWorldPosition(tile.Index) + extents); // no idea why i have to add extents but it works :(
             }
         }
 
@@ -63,7 +67,7 @@ namespace Clouds
         {
             var x = Mathf.FloorToInt(position.x / _bounds.size.x);
             var y = Mathf.FloorToInt(position.y / _bounds.size.y);
-            return new Vector2Int(x, y + 1);
+            return new Vector2Int(x, y);
         }
 
         private Vector2 TileIndexToWorldPosition(Vector2Int tileIndex)
@@ -84,5 +88,18 @@ namespace Clouds
             }
             return res;
         }
+
+        // private void OnDrawGizmos()
+        // {
+        //     if (!Application.isPlaying) return;
+        //     var bounds = Utility.GetScreenBounds(0);
+        //     var tiles = GetTileIndexes(bounds.center);
+        //     foreach (var tile in tiles)
+        //     {
+        //         var center = TileIndexToWorldPosition(tile) + bounds.extents.xy();
+        //         Gizmos.DrawWireCube(center, bounds.size);
+        //     }
+        //     // Gizmos.DrawWireCube(_bounds.center, _bounds.size);
+        // }
     }
 }

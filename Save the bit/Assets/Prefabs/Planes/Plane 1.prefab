@@ -107,8 +107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minRayStrength: 10
   controller:
-    speed: 100
-    smoothMoveRotation: 310
+    speed: 120
+    smoothMoveRotation: 250
     smoothLookRotation: 360
     rigidbody: {fileID: 0}
 --- !u!1 &8477710885720737762
@@ -192,14 +192,14 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0028554983
-        value: 0.07606072
-        inSlope: -0.66961956
-        outSlope: -0.66961956
+        time: 0
+        value: 0.18162756
+        inSlope: 0.22506301
+        outSlope: 0.22506301
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.1995624
+        outWeight: 0.13790323
       - serializedVersion: 3
         time: 0.7234637
         value: 0.0125786215
@@ -331,14 +331,14 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0028554983
-        value: 0.07606072
-        inSlope: -0.66961956
-        outSlope: -0.66961956
+        time: 0
+        value: 0.18162756
+        inSlope: 0.22506301
+        outSlope: 0.22506301
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.1995624
+        outWeight: 0.13790323
       - serializedVersion: 3
         time: 0.7234637
         value: 0.0125786215

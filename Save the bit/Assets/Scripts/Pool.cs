@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class Pool<T> where T : MonoBehaviour
 {
     private readonly T _obj;
     private readonly Queue<T> _queue;
 
-    private List<T> _active = new List<T>();
+    private readonly List<T> _active = new List<T>();
+
+    public event Action<T> Borrowed;
+    public event Action<T> Returned;
 
     public IReadOnlyList<T> Active => _active;
 
@@ -29,12 +34,15 @@ public class Pool<T> where T : MonoBehaviour
         if (_queue.Count > 0)
         {
             var go = _queue.Dequeue();
-            go.gameObject.SetActive(setActive);
+            if(setActive) go.gameObject.SetActive(true);
             _active.Add(go);
+            Borrowed?.Invoke(go);
             return go;
         }
+        _obj.gameObject.SetActive(setActive);
         var obj = Object.Instantiate(_obj);
         _active.Add(obj);
+        Borrowed?.Invoke(obj);
         return obj;
     }
 
@@ -43,5 +51,6 @@ public class Pool<T> where T : MonoBehaviour
         _queue.Enqueue(obj);
         obj.gameObject.SetActive(false);
         _active.Remove(obj);
+        Returned?.Invoke(obj);
     }
 }

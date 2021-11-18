@@ -51,6 +51,7 @@ public class CosmicRay : MonoBehaviour
     {
         _depth = 0;
         _elapsed = 0;
+        _trail.Clear();
         _trail.emitting = false;
     }
 
@@ -76,7 +77,6 @@ public class CosmicRay : MonoBehaviour
             // split
             var angle = Vector2.Angle(Vector2.up, transform.up);
             var rotation = Quaternion.AngleAxis(angle + GetDeflection(maxDeflection, minDeflection), Vector3.forward);
-            // var go = Instantiate(prefab, transform.position, rotation);
             var go = Pool.Borrow(false);
             go.transform.position = transform.position;
             go.transform.rotation = rotation;
@@ -84,7 +84,6 @@ public class CosmicRay : MonoBehaviour
             go._depth = _depth + 1;
             go.strength = Random.Range(strength / 7, strength * 6 / 7);
             go.gameObject.SetActive(true);
-            // go.gameObject.name = "Deflected Ray";
             SetStrength(strength - go.strength);
             transform.rotation = Quaternion.AngleAxis(angle + GetDeflection(minDeflection, 0), Vector3.forward);
         }

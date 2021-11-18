@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Enemy;
 using Game.Missiles;
 using Game.Player;
 using UI;
@@ -12,9 +13,9 @@ namespace Game
         [SerializeField] private float spawnDistance = 50;
         [SerializeField] private float spawnDelay = 1; // wait this much sec before spawning new
         [SerializeField] private CosmicRay prefab;
-        [SerializeField] private MissileSpawner missileSpawner;
 
         internal PlayerController Player;
+        internal EnemySpawner EnemySpawner;
         
         private Pool<CosmicRay> _pool;
 
@@ -36,9 +37,9 @@ namespace Game
                 
                 var target = Player.GetComponent<Rigidbody2D>();
                 var rand = Random.value;
-                if (rand >= 0.5 && missileSpawner.ActiveMissiles.Count > 0)
+                if (rand >= 0.5 && EnemySpawner.Active.Count > 0)
                 {
-                    target = missileSpawner.ActiveMissiles.GetRandom().GetComponent<Rigidbody2D>();
+                    target = EnemySpawner.Active.SelectRandom().GetComponent<Rigidbody2D>();
                 }
 
                 var currentTargetPosition = target.transform.position;

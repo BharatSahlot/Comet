@@ -1,20 +1,12 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Data
 {
-    [System.Serializable]
-    public struct GameData
+    [CreateAssetMenu(fileName = "Game Data", menuName = "_/Game Data", order = 0)]
+    public class GameData : ScriptableObject
     {
-        public int coins;
-        
-        public int planeIndex;
-        public int shieldIndex;
-
-        public List<int> planesBought;
-        public List<int> shieldsBought;
-
-        // last / current play data
-        public int coinsCollected;
-        public int baseCoins;
+        public List<Plane> planes;
+        public List<Shield> shields;
     }
 }

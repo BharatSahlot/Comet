@@ -16,12 +16,11 @@ namespace UI
         [SerializeField] private TextMeshProUGUI baseCoinText;
         [SerializeField] private TextMeshProUGUI bonusCoinText;
         [SerializeField] private TextMeshProUGUI totalCoinText;
+        [SerializeField] private TextMeshProUGUI coinText;
 
         [Space]
         [SerializeField] private Button replayButton;
         
-        internal DataManager DataManager;
-
         private void Awake()
         {
             replayButton.onClick.AddListener(() =>
@@ -30,15 +29,15 @@ namespace UI
             });
         }
 
-        public void Display()
+        public void Display(int timeCoins, int coinsCollected, int totalCoins)
         {
-            int baseCoins = Mathf.FloorToInt(DataManager.BaseCoins);
-            int coinsCollected = DataManager.CoinsCollected;
-            int total = baseCoins + coinsCollected;
+            int total = timeCoins + coinsCollected;
             
-            baseCoinText.SetText($"+{baseCoins}");
+            baseCoinText.SetText($"+{timeCoins}");
             bonusCoinText.SetText($"+{coinsCollected}");
             totalCoinText.SetText($"{total}");
+            
+            coinText.SetText($"{totalCoins}");
             
             gameCanvas.SetActive(false);
             gameObject.SetActive(true);

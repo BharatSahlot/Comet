@@ -150,7 +150,7 @@ namespace Game.Missiles
             {
                 if(!_icon.activeSelf) _icon.SetActive(true);
             
-                _icon.transform.position = Utility.WorldPosToBorder(transform.position, screenBorder);
+                _icon.transform.position = Utility.WorldPosToBorder(transform.position, screenBorder, _camera);
                 _icon.transform.up = (_player.transform.position - _icon.transform.position).normalized;
             }
             else

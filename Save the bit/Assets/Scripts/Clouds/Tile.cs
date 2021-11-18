@@ -28,7 +28,7 @@ namespace Clouds
             _clouds = new List<SpriteRenderer>();
             for (int i = 0; i < _tileSettings.maxClouds; i++)
             {
-                var cloud = Object.Instantiate(tileSettings.cloudPrefabs.GetRandom());
+                var cloud = Object.Instantiate(tileSettings.cloudPrefabs.SelectRandom());
                 cloud.gameObject.SetActive(false);
                 _clouds.Add(cloud);
             }
@@ -49,7 +49,7 @@ namespace Clouds
 
                     i -= 15;
                     j -= 15;
-                    points.Add(new Vector2(i * width / 15f, j * height / 15f) + offset);
+                    points.Add(new Vector2(i * width / 15f, j * height / 15f));
                     i += 15;
                     j += 15;
                 }
@@ -62,7 +62,7 @@ namespace Clouds
             var selected = 0;
             while (selected < _tileSettings.maxClouds && points.Count > 0)
             {
-                var point = points.GetRandom();
+                var point = points.SelectRandom();
                 selectedPoints.Add(point);
                 points.RemoveAll((e) => Vector2.Distance(point, e) < radius);
                 selected++;
@@ -76,7 +76,7 @@ namespace Clouds
                 color.a = Random.Range(_tileSettings.minAlpha, _tileSettings.maxAlpha);
                 cloud.color = color;
                 cloud.gameObject.SetActive(true);
-                cloud.transform.position = point;
+                cloud.transform.position = point + offset;
             }
         }
     }

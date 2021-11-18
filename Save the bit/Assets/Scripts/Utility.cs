@@ -1,71 +1,40 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class Utility
 {
     private static Camera _camera;
 
-    public static Bounds GetScreenBounds(float depth)
+    public static Bounds GetScreenBounds(float depth, Camera camera)
     {
-        if (_camera == null) _camera = Camera.main;
-        
-        Vector3 center = _camera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, depth));
-        Vector3 size = ScreenToWorldSize(depth);
+        Vector3 center = camera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, depth));
+        Vector3 size = ScreenToWorldSize(depth, camera);
         return new Bounds(center, size);
     }
-    
-    public static Vector2 ScreenToWorldSize(float depth)
-    {
-        if (_camera == null) _camera = Camera.main;
-        
-        var corners = new Vector3[4]
-        {
-            _camera.ViewportToWorldPoint(new Vector3(0, 0, depth)),
-            _camera.ViewportToWorldPoint(new Vector3(0, 1, depth)),
-            _camera.ViewportToWorldPoint(new Vector3(1, 0, depth)),
-            _camera.ViewportToWorldPoint(new Vector3(1, 1, depth)),
-        };
-        
-        float minX = float.MaxValue, maxX = float.MinValue;
-        float minY = float.MaxValue, maxY = float.MinValue;
-        foreach (var localCorner in corners)
-        {
-            var corner = _camera.transform.TransformVector(localCorner);
-            minX = Mathf.Min(minX, corner.x);
-            minY = Mathf.Min(minY, corner.y);
-            maxX = Mathf.Max(maxX, corner.x);
-            maxY = Mathf.Max(maxY, corner.y);
-        }
 
-        return new Vector2(maxX - minX, maxY - minY);
+    private static Vector4 ScreenMinMaxToWorld(float depth, Camera camera)
+    {
+        var cameraTransform = camera.transform;
+        var min = cameraTransform.TransformVector(camera.ViewportToWorldPoint(new Vector3(0, 0, depth)));
+        var max = cameraTransform.TransformVector(camera.ViewportToWorldPoint(new Vector3(1, 1, depth)));
+        return new Vector4(min.x, min.y, max.x, max.y);
     }
     
-    public static Vector3 WorldPosToBorder(Vector3 worldPos, float screenBorder)
+    public static Vector2 ScreenToWorldSize(float depth, Camera camera)
     {
-        if (_camera == null) _camera = Camera.main;
+        var screenMinMax = ScreenMinMaxToWorld(depth, camera);
+
+        return new Vector2(screenMinMax.z - screenMinMax.x, screenMinMax.w - screenMinMax.y);
+    }
+    
+    public static Vector3 WorldPosToBorder(Vector3 worldPos, float screenBorder, Camera camera)
+    {
+        var screenMinMax = ScreenMinMaxToWorld(0, camera);
         
-        var corners = new Vector3[4]
-        {
-            _camera.ViewportToWorldPoint(new Vector3(0, 0, 0)),
-            _camera.ViewportToWorldPoint(new Vector3(0, 1, 0)),
-            _camera.ViewportToWorldPoint(new Vector3(1, 0, 0)),
-            _camera.ViewportToWorldPoint(new Vector3(1, 1, 0)),
-        };
-    
-        float minX = float.MaxValue, maxX = float.MinValue;
-        float minY = float.MaxValue, maxY = float.MinValue;
-        foreach (var localCorner in corners)
-        {
-            var corner = _camera.transform.TransformVector(localCorner);
-            minX = Mathf.Min(minX, corner.x);
-            minY = Mathf.Min(minY, corner.y);
-            maxX = Mathf.Max(maxX, corner.x);
-            maxY = Mathf.Max(maxY, corner.y);
-        }
-    
-        minX += screenBorder;
-        maxX -= screenBorder;
-        minY += screenBorder;
-        maxY -= screenBorder;
+        var minX = screenMinMax.x + screenBorder;
+        var maxX = screenMinMax.z - screenBorder;
+        var minY = screenMinMax.y + screenBorder;
+        var maxY = screenMinMax.w - screenBorder;
     
         var pos = worldPos;
         pos.x = Mathf.Clamp(pos.x, minX, maxX);

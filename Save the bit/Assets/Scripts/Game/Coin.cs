@@ -9,25 +9,23 @@ namespace Game
         internal Pool<Coin> Pool;
         
         [SerializeField] private float lifeTime;
-        [SerializeField] private float randomLifeTimeDelta;
         [SerializeField] private float dieAnimationTime;
         [SerializeField] private GameObject offScreenIcon;
         [SerializeField] private float screenBorder = 0.1f;
 
         internal GameObject Player;
         
-        private float _lifeTime;
         private float _elapsed;
         private Vector3 _defaultScale;
-
-        private bool _dead;
 
         private GameObject _icon;
 
         private SpriteRenderer _renderer;
+        private Camera _camera;
 
         private void Awake()
         {
+            _camera = Camera.main;
             _defaultScale = transform.localScale;
             _renderer = GetComponent<SpriteRenderer>();
             
@@ -38,13 +36,12 @@ namespace Game
         private void OnEnable()
         {
             transform.localScale = _defaultScale;
-            _lifeTime = lifeTime + Random.Range(-randomLifeTimeDelta, randomLifeTimeDelta);
             _elapsed = 0;
         }
 
         private void OnDisable()
         {
-            if (_icon)
+            if (_icon != null)
             {
                 _icon.SetActive(false);
             }
@@ -53,9 +50,9 @@ namespace Game
         private void Update()
         {
             _elapsed += Time.deltaTime;
-            if (_elapsed >= _lifeTime)
+            if (_elapsed >= lifeTime)
             {
-                var elapsed = _elapsed - _lifeTime;
+                var elapsed = _elapsed - lifeTime;
                 var t =  elapsed / dieAnimationTime;
                 transform.localScale = _defaultScale * Mathf.Lerp(1, 0, t);
                 if(elapsed >= dieAnimationTime) Pool.Return(this);
@@ -69,12 +66,12 @@ namespace Game
 
         private void PositionIcon()
         {
-            if (!_dead && !_renderer.isVisible && Player != null)
+            if (!_renderer.isVisible && Player != null)
             {
                 if(!_icon.activeSelf) _icon.SetActive(true);
 
                 var position = transform.position;
-                _icon.transform.position = Utility.WorldPosToBorder(position, screenBorder);
+                _icon.transform.position = Utility.WorldPosToBorder(position, screenBorder, _camera);
                 _icon.transform.up = (position - Player.transform.position).normalized;
             }
             else
