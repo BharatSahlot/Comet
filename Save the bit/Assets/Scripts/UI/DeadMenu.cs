@@ -42,5 +42,10 @@ namespace UI
             gameCanvas.SetActive(false);
             gameObject.SetActive(true);
         }
+
+        public void UpdateTotalCoins(int totalCoins)
+        {
+            coinText.SetText($"{totalCoins}");
+        }
     }
 }

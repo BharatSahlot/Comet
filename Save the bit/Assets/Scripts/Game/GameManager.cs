@@ -32,12 +32,15 @@ namespace Game
         [SerializeField] internal DeadMenu deadMenu;
         [SerializeField] internal Explosion deadExplosion;
 
+        [SerializeField] internal GameObject rewardedAdPopup;
+
         internal PlayerController PlayerController;
         internal Player.Shield Shield;
 
         private float _playStartTime;
 
         private bool _playing = true;
+        private int _currentPlayCoins = 0;
 
         private void Awake()
         {
@@ -84,7 +87,9 @@ namespace Game
                 Destroy(Shield.gameObject);
 
                 dataManager.TimeCoins = Mathf.FloorToInt(Time.time - _playStartTime);
-                dataManager.Coins += dataManager.CoinsCollected + dataManager.TimeCoins;
+                _currentPlayCoins = dataManager.CoinsCollected + dataManager.TimeCoins;
+                // dataManager.Coins += dataManager.CoinsCollected + dataManager.TimeCoins;
+                dataManager.Coins += _currentPlayCoins;
                 deadMenu.Display(dataManager.TimeCoins, dataManager.CoinsCollected, dataManager.Coins);
                 
                 dataManager.CoinsCollected = 0;
@@ -108,6 +113,24 @@ namespace Game
             timeText.SetText(TimeSpan.FromSeconds(elapsed).ToString(@"hh\:mm\:ss",CultureInfo.InvariantCulture));
         }
 
+        public void PlayRewardedAd()
+        {
+            CrazyAds.Instance.beginAdBreakRewarded(OnAdSuccess, OnAdFail);
+        }
+
+        private void OnAdSuccess()
+        {
+            Debug.Log("Ad Playing");
+            dataManager.Coins += _currentPlayCoins;
+            _currentPlayCoins = 0;
+            deadMenu.UpdateTotalCoins(dataManager.Coins);
+        }
+
+        private void OnAdFail()
+        {
+            rewardedAdPopup.SetActive(true);
+        }
+
         private void OnDestroy()
         {
             dataManager = null;
@@ -123,6 +146,7 @@ namespace Game
             deadMenu = null;
             PlayerController = null;
             Shield = null;
+            rewardedAdPopup = null;
         }
     }
 }
