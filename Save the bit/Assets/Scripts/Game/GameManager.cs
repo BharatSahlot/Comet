@@ -7,6 +7,8 @@ using Game.Player;
 using TMPro;
 using UI;
 using UnityEngine;
+using UnityEngine.Scripting;
+using UnityEngine.UI;
 
 namespace Game
 {
@@ -33,6 +35,7 @@ namespace Game
         [SerializeField] internal Explosion deadExplosion;
 
         [SerializeField] internal GameObject rewardedAdPopup;
+        [SerializeField] internal Button rewardedAdBtn;
 
         internal PlayerController PlayerController;
         internal Player.Shield Shield;
@@ -80,6 +83,7 @@ namespace Game
             dataManager.CoinsCollected = 0;
             dataManager.TimeCoins = 0;
             
+
             PlayerController.MissileHit += (controller, _) =>
             {
                 _playing = false;
@@ -96,11 +100,13 @@ namespace Game
                 dataManager.TimeCoins = 0;
                 PlayerController = null;
                 Shield = null;
+                CrazySDK.Instance.GameplayStop();
             };
         }
 
         private void Start()
         {
+            inputManager.SetInputMode(dataManager.InputMode);
             _playing = true;
             _playStartTime = Time.time;
         }
@@ -113,6 +119,7 @@ namespace Game
             timeText.SetText(TimeSpan.FromSeconds(elapsed).ToString(@"hh\:mm\:ss",CultureInfo.InvariantCulture));
         }
 
+        [Preserve]
         public void PlayRewardedAd()
         {
             CrazyAds.Instance.beginAdBreakRewarded(OnAdSuccess, OnAdFail);
@@ -124,6 +131,7 @@ namespace Game
             dataManager.Coins += _currentPlayCoins;
             _currentPlayCoins = 0;
             deadMenu.UpdateTotalCoins(dataManager.Coins);
+            rewardedAdBtn.gameObject.SetActive(false);
         }
 
         private void OnAdFail()
@@ -147,6 +155,7 @@ namespace Game
             PlayerController = null;
             Shield = null;
             rewardedAdPopup = null;
+            rewardedAdBtn = null;
         }
     }
 }

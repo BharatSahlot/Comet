@@ -63,6 +63,26 @@ namespace Game.Data
             }
         }
 
+        public InputMode InputMode
+        {
+            get => _saveData.inputMode;
+            set
+            {
+                _saveData.inputMode = value;
+                Save(_saveData);
+            }
+        }
+        
+        public int EffectsVolume
+        {
+            get => _saveData.effectsVolume;
+            set
+            {
+                _saveData.effectsVolume = value;
+                Save(_saveData);
+            }
+        }
+
         public bool HasBoughtPlane(int i)
         {
             return _saveData.planesBought.Contains(i);
@@ -146,6 +166,7 @@ namespace Game.Data
             
             writer.Write(data.timeCoins);
             writer.Write(data.coinsCollected);
+            writer.Write((int)data.inputMode);
             
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
@@ -187,11 +208,13 @@ namespace Game.Data
 
                 data.coinsCollected = reader.ReadInt32();
                 data.timeCoins = reader.ReadInt32();
+                data.inputMode = (InputMode)reader.ReadInt32();
             }
             catch
             {
                 data.planesBought = new List<int>() { 0 };
                 data.shieldsBought = new List<int>() { 0 };
+                data.inputMode = InputMode.Joystick;
             }
 
             return data;

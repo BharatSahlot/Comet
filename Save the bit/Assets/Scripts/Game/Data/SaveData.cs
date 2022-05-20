@@ -16,5 +16,8 @@ namespace Game.Data
         // last / current play data
         public int coinsCollected;
         public int timeCoins;
+
+        public InputMode inputMode;
+        public int effectsVolume;
     }
 }

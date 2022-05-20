@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
+    [SerializeField] private AudioClip clip;
+    
     public bool destroyOnFinish = false;
     private ParticleSystem[] _particles;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
+        _audioSource = GetComponent<AudioSource>();
         _particles = GetComponentsInChildren<ParticleSystem>();
         foreach (var system in _particles)
         {
@@ -26,6 +30,7 @@ public class Explosion : MonoBehaviour
             system.Play();
             duration = Mathf.Max(duration, system.main.duration);
         }
+        _audioSource.PlayOneShot(clip);
         if(destroyOnFinish) Destroy(gameObject, duration);
     }
 }

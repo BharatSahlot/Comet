@@ -20,6 +20,7 @@ namespace UI
 
         [Space]
         [SerializeField] private Button replayButton;
+        [SerializeField] private Button rewardButton;
         
         private void Awake()
         {
@@ -38,6 +39,8 @@ namespace UI
             totalCoinText.SetText($"{total}");
             
             coinText.SetText($"{totalCoins}");
+            
+            rewardButton.gameObject.SetActive(true);
             
             gameCanvas.SetActive(false);
             gameObject.SetActive(true);

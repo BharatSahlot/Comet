@@ -16,5 +16,5 @@ MonoBehaviour:
   shieldSprite: {fileID: 21300000, guid: 2819188b49e7cc4408fee17088e555e3, type: 3}
   shieldMaterial: {fileID: 2100000, guid: 2d34c4173510e3248a1a4a9079a7d19c, type: 2}
   name: Cargo Grade Screen
-  description: "+120\xB0 Coverage"
+  description: "220\xB0 Coverage"
   cost: 350

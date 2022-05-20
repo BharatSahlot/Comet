@@ -14,6 +14,7 @@ namespace Game.Player
 
         public float minRayStrength = 10; // only rays above this strength can affect player
         [SerializeField] private RigidbodyController controller;
+        [SerializeField] private AudioClip idleSound;
 
         internal InputManager InputManager;
         internal Explosion DeadExplosion;
@@ -26,6 +27,13 @@ namespace Game.Player
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             controller.rigidbody = _rigidbody;
+            
+            var audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.clip = idleSound;
+            audioSource.loop = true;
+            audioSource.Play();
+            
+            CrazySDK.Instance.GameplayStart();
         }
 
         private void FixedUpdate()
@@ -63,6 +71,7 @@ namespace Game.Player
 
         private void OnDestroy()
         {
+            GetComponent<AudioSource>().Stop();
             CosmicRayHit = null;
             MissileHit = null;
         }

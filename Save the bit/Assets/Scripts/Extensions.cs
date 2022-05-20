@@ -19,7 +19,7 @@ public static class Extensions
 
     public static T SelectRandom<T>(this IReadOnlyList<T> list)
     {
-        if (list.Count == 0) return default;
+        if (list == null || list.Count == 0) return default;
         var rand = Random.Range(0, list.Count);
         return list[rand];
     }

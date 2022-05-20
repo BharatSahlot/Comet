@@ -34,9 +34,20 @@ namespace Game.Enemy
 
         public float XMultiplier { get; set; } = 1;
         public float YMultiplier { get; set; } = 1;
-        public GameObject Target { get; set; }
-        
+
+        public GameObject Target
+        {
+            get => _target;
+            set
+            {
+                _isTargetNull = value == null;
+                _target = value;
+            }
+        }
+
         public override bool IsActive() => _started && !_dead && gameObject.activeSelf;
+
+        private bool _isTargetNull = true;
 
 
         private readonly List<(float probablity, IModification<MissileDualPart> modification)> _modifications = new List<(float probablity, IModification<MissileDualPart>)>()
@@ -46,7 +57,9 @@ namespace Game.Enemy
             (0.3f, new AttackFriendlyModification()),
             (0.1f, new SelfDestructModification())
         };
-        
+
+        private GameObject _target;
+
 
         // direction: 1 up -1 down
         private void Awake()
@@ -126,7 +139,8 @@ namespace Game.Enemy
 
         private void FixedUpdate()
         {
-            if (!_started || Player == null) return;
+            //if (!_started || Target == null) return;
+            if (!_started || _isTargetNull) return;
             
             if (_dead)
             {
@@ -137,13 +151,9 @@ namespace Game.Enemy
             _rigidbody.drag = 10;
             if (_following)
             {
-                var dir = transform.up;
-                if (Player != null)
-                {
-                    dir = (Target.transform.position - transform.position).normalized;
-                    dir.x *= XMultiplier;
-                    dir.y *= YMultiplier;
-                }
+                var dir = (Target.transform.position - transform.position).normalized;
+                dir.x *= XMultiplier;
+                dir.y *= YMultiplier;
                 controller.Update(dir);
             }
             else

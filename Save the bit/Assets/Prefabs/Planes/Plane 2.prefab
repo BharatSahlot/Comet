@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.02, y: -3.67, z: 0}
   m_LocalScale: {x: 0.26626918, y: 0.2662692, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8477710885919628344}
   m_Father: {fileID: 0}
@@ -111,6 +112,7 @@ MonoBehaviour:
     smoothMoveRotation: 275
     smoothLookRotation: 360
     rigidbody: {fileID: 0}
+  idleSound: {fileID: 8300000, guid: e6d32a7435ca6a641984c01fa4eaa4a2, type: 3}
 --- !u!1 &8477710885720737762
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +140,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.387, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8477710885919628344}
   m_RootOrder: 1
@@ -277,6 +280,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.387, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8477710885919628344}
   m_RootOrder: 0
@@ -416,6 +420,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.000000013990691, y: 0, z: 0}
   m_LocalScale: {x: 1.4099237, y: 1.4099237, z: 0.93897283}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8477710885864942052}
   - {fileID: 8477710885720737763}
