@@ -13,13 +13,17 @@ namespace Game
     {
         [SerializeField] private InputMode inputMode = InputMode.Joystick;
         [SerializeField] private Joystick joystick;
+        [SerializeField] private GameObject joystickUI;
         [SerializeField] private float keyboardSensitivity = 5;
 
-        private Vector2 _currentDir;
+        //private Vector2 _currentDir = Vector2.up;
+        private float _currentAngle = 0;
         
         public void SetInputMode(InputMode mode)
         {
             inputMode = mode;
+            if(mode == InputMode.Keyboard) joystickUI.SetActive(false);
+            else joystickUI.SetActive(true);
         }
         
         public Vector2 GetMoveDirection()
@@ -30,10 +34,10 @@ namespace Game
                     return new Vector2(joystick.X, joystick.Y);
                 case InputMode.Keyboard:
                 {
-                    float angle = Vector2.Angle(Vector2.up, _currentDir);
-                    angle += Input.GetAxis("Horizontal") * keyboardSensitivity;
-                    return _currentDir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-                    //return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                     float angle = Mathf.LerpAngle(_currentAngle, _currentAngle + Input.GetAxis("Horizontal") * keyboardSensitivity * Time.deltaTime, 1);
+                     Vector3 dir = Quaternion.AngleAxis(angle, -Vector3.forward) * Vector3.up;
+                     _currentAngle = angle;
+                    return dir;
                 }
                 default:
                     return Vector2.zero;

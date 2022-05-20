@@ -149,7 +149,7 @@ namespace Game.Enemy
             }
             
             _rigidbody.drag = 10;
-            if (_following)
+            if (_following && Target != null)
             {
                 var dir = (Target.transform.position - transform.position).normalized;
                 dir.x *= XMultiplier;

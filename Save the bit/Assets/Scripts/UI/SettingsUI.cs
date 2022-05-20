@@ -21,6 +21,17 @@ namespace UI
 
         private void Awake()
         {
+            if (dataManager.InputMode == InputMode.Joystick)
+            {
+                keyboardBtn.image.sprite = keyboardOffSprite;
+                joystickBtn.image.sprite = joystickOnSprite;
+            }
+            else
+            {
+                keyboardBtn.image.sprite = keyboardOnSprite;
+                joystickBtn.image.sprite = joystickOffSprite;
+            }
+            
             keyboardBtn.onClick.AddListener(() =>
             {
                 keyboardBtn.image.sprite = keyboardOnSprite;

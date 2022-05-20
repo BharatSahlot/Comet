@@ -43,11 +43,15 @@ namespace Game.Player
                 controller.Update(Vector2.zero);
                 return;
             }
-            
-            var dir = InputManager.GetMoveDirection();
+
+            var inputDir = InputManager.GetMoveDirection();
+            var dir = inputDir;
             dir.x *= XMultiplier;
             dir.y *= YMultiplier;
             controller.Update(dir);
+            
+            Debug.DrawRay(transform.position, inputDir * 5, Color.green);
+            Debug.DrawRay(transform.position, dir * 5, Color.red);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
