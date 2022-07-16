@@ -19,12 +19,12 @@ namespace UI
         }
 
         public void ResetAndHide()
+
         {
             _elapsed = _duration = 0;
             timeLeftIndicator.fillAmount = 1;
             gameObject.SetActive(false);
         }
-
         private void OnDisable()
         {
             _elapsed = _duration = 0;

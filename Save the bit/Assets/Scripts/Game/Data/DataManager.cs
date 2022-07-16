@@ -189,6 +189,9 @@ namespace Game.Data
             try
             {
                 data.coins = reader.ReadInt32();
+                #if UNITY_EDITOR
+                data.coins = 10000;
+                #endif
                 data.planeIndex = reader.ReadInt32();
                 data.shieldIndex = reader.ReadInt32();
 

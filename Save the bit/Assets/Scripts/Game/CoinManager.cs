@@ -3,6 +3,7 @@ using System.Collections;
 using Game.Data;
 using Game.Player;
 using TMPro;
+using UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,7 +11,7 @@ namespace Game
 {
     public class CoinManager : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI coinText;
+        [SerializeField] private ResponsiveUIManager uiManager;
         [SerializeField] private Coin coinPrefab;
         [SerializeField] private float spawnDelay;
         [SerializeField] private float spawnDistance;
@@ -23,11 +24,11 @@ namespace Game
         private void Start()
         {
             _pool = new Pool<Coin>(coinPrefab, 5);
-            coinText.SetText($"{DataManager.CoinsCollected}");
+            uiManager.GameUI.SetCoins(DataManager.CoinsCollected);
             PlayerController.CoinHit += () =>
             {
                 DataManager.CoinsCollected++;
-                coinText.SetText($"{DataManager.CoinsCollected}");
+                uiManager.GameUI.SetCoins(DataManager.CoinsCollected);
             };
             StartCoroutine(Spawn());
         }

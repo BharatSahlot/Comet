@@ -47,10 +47,12 @@ namespace UI
 
                 dataManager.InputMode = InputMode.Joystick;
             });
-            
+
+            volumeSlider.value = dataManager.EffectsVolume;
             volumeSlider.onValueChanged.AddListener((volume) =>
             {
                 dataManager.EffectsVolume = Mathf.RoundToInt(volume * 100);
+                AudioListener.volume = volume;
             });
         }
     }

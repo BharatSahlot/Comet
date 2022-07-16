@@ -10,7 +10,7 @@ namespace UI
 {
     public class DeadMenu : MonoBehaviour
     {
-        [SerializeField] private GameObject gameCanvas;
+        [SerializeField] private ResponsiveUIManager uiManager;
         
         [Space]
         [SerializeField] private TextMeshProUGUI baseCoinText;
@@ -42,7 +42,7 @@ namespace UI
             
             rewardButton.gameObject.SetActive(true);
             
-            gameCanvas.SetActive(false);
+            uiManager.GameUI.gameObject.SetActive(false);
             gameObject.SetActive(true);
         }
 

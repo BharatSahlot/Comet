@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Data;
 using Game.Missiles;
 using UnityEngine;
 
@@ -28,12 +29,16 @@ namespace Game.Player
             _rigidbody = GetComponent<Rigidbody2D>();
             controller.rigidbody = _rigidbody;
             
+            
+            CrazySDK.Instance.GameplayStart();
+        }
+
+        private void Start()
+        {
             var audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.clip = idleSound;
             audioSource.loop = true;
             audioSource.Play();
-            
-            CrazySDK.Instance.GameplayStart();
         }
 
         private void FixedUpdate()

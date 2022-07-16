@@ -20,7 +20,7 @@ namespace Game.Player
         public float probability;
         public float duration;
         public ModificationType type;
-        public PlayerEffectPanelUI ui;
+        public PlayerEffectPanelUI[] ui;
     }
     
     public class ModificationController : MonoBehaviour
@@ -74,7 +74,10 @@ namespace Game.Player
             }
             else
             {
-                _currentModification.ui.ResetAndHide();
+                foreach (var ui in _currentModification.ui)
+                {
+                    ui.ResetAndHide();
+                }
                 ApplyModification(null);
             }
         }
@@ -91,7 +94,11 @@ namespace Game.Player
                 _currentModificationType = modification.type;
                 _elapsed = 0;
                 _duration = modification.duration;
-                modification.ui.ShowForSeconds(modification.duration);
+                // modification.ui.ShowForSeconds(modification.duration);
+                foreach (var ui in _currentModification.ui)
+                {
+                    ui.ShowForSeconds(modification.duration);
+                }
             }
             switch (_currentModificationType)
             {

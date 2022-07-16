@@ -16,7 +16,6 @@ namespace Game
     {
         [SerializeField] private DataManager dataManager;
         [SerializeField] private GameData gameData;
-        [SerializeField] private TextMeshProUGUI timeText;
 
         [SerializeField] internal ModificationController modificationController;
         [SerializeField] internal InputManager inputManager;
@@ -31,7 +30,7 @@ namespace Game
 
         [SerializeField] internal SlowMotionEffect slowMotionEffect;
 
-        [SerializeField] internal DeadMenu deadMenu;
+        [SerializeField] internal ResponsiveUIManager uiManager;
         [SerializeField] internal Explosion deadExplosion;
 
         [SerializeField] internal GameObject rewardedAdPopup;
@@ -83,7 +82,6 @@ namespace Game
             dataManager.CoinsCollected = 0;
             dataManager.TimeCoins = 0;
             
-
             PlayerController.MissileHit += (controller, _) =>
             {
                 _playing = false;
@@ -94,7 +92,7 @@ namespace Game
                 _currentPlayCoins = dataManager.CoinsCollected + dataManager.TimeCoins;
                 // dataManager.Coins += dataManager.CoinsCollected + dataManager.TimeCoins;
                 dataManager.Coins += _currentPlayCoins;
-                deadMenu.Display(dataManager.TimeCoins, dataManager.CoinsCollected, dataManager.Coins);
+                uiManager.DeadMenu.Display(dataManager.TimeCoins, dataManager.CoinsCollected, dataManager.Coins);
                 
                 dataManager.CoinsCollected = 0;
                 dataManager.TimeCoins = 0;
@@ -116,7 +114,7 @@ namespace Game
             if (!_playing) return;
             
             var elapsed = Time.time - _playStartTime;
-            timeText.SetText(TimeSpan.FromSeconds(elapsed).ToString(@"hh\:mm\:ss",CultureInfo.InvariantCulture));
+            uiManager.GameUI.SetTime(TimeSpan.FromSeconds(elapsed).ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture));
         }
 
         [Preserve]
@@ -130,7 +128,7 @@ namespace Game
             Debug.Log("Ad Playing");
             dataManager.Coins += _currentPlayCoins;
             _currentPlayCoins = 0;
-            deadMenu.UpdateTotalCoins(dataManager.Coins);
+            uiManager.DeadMenu.UpdateTotalCoins(dataManager.Coins);
             rewardedAdBtn.gameObject.SetActive(false);
         }
 
@@ -151,7 +149,7 @@ namespace Game
             coinManager = null;
             cinemachine = null;
             slowMotionEffect = null;
-            deadMenu = null;
+            uiManager = null;
             PlayerController = null;
             Shield = null;
             rewardedAdPopup = null;
