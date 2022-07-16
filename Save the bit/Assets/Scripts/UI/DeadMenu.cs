@@ -10,7 +10,7 @@ namespace UI
 {
     public class DeadMenu : MonoBehaviour
     {
-        [SerializeField] private ResponsiveUIManager uiManager;
+        [SerializeField] private ResponsiveGameUIManager uiManager;
         
         [Space]
         [SerializeField] private TextMeshProUGUI baseCoinText;

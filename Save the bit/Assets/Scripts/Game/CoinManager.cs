@@ -11,7 +11,7 @@ namespace Game
 {
     public class CoinManager : MonoBehaviour
     {
-        [SerializeField] private ResponsiveUIManager uiManager;
+        [SerializeField] private ResponsiveGameUIManager uiManager;
         [SerializeField] private Coin coinPrefab;
         [SerializeField] private float spawnDelay;
         [SerializeField] private float spawnDistance;

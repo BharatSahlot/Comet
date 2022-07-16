@@ -30,7 +30,7 @@ namespace Game
 
         [SerializeField] internal SlowMotionEffect slowMotionEffect;
 
-        [SerializeField] internal ResponsiveUIManager uiManager;
+        [SerializeField] internal ResponsiveGameUIManager uiManager;
         [SerializeField] internal Explosion deadExplosion;
 
         [SerializeField] internal GameObject rewardedAdPopup;
