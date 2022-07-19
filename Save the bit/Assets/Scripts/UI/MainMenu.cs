@@ -1,7 +1,5 @@
-﻿using System;
-using Game.Data;
+﻿using Game.Data;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace UI

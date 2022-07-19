@@ -4,7 +4,6 @@ using Cinemachine;
 using Game.Data;
 using Game.Enemy;
 using Game.Player;
-using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -33,8 +32,6 @@ namespace Game
         [SerializeField] internal ResponsiveGameUIManager uiManager;
         [SerializeField] internal Explosion deadExplosion;
 
-        [SerializeField] internal GameObject rewardedAdPopup;
-        [SerializeField] internal Button rewardedAdBtn;
 
         internal PlayerController PlayerController;
         internal Player.Shield Shield;
@@ -129,12 +126,12 @@ namespace Game
             dataManager.Coins += _currentPlayCoins;
             _currentPlayCoins = 0;
             uiManager.DeadMenu.UpdateTotalCoins(dataManager.Coins);
-            rewardedAdBtn.gameObject.SetActive(false);
+            uiManager.DeadMenu.rewardButton.gameObject.SetActive(false);
         }
 
         private void OnAdFail()
         {
-            rewardedAdPopup.SetActive(true);
+            uiManager.DeadMenu.rewardedAdFailPopup.SetActive(true);
         }
 
         private void OnDestroy()
@@ -152,8 +149,6 @@ namespace Game
             uiManager = null;
             PlayerController = null;
             Shield = null;
-            rewardedAdPopup = null;
-            rewardedAdBtn = null;
         }
     }
 }

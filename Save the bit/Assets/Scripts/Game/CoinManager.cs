@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Game.Data;
 using Game.Player;
-using TMPro;
 using UI;
 using UnityEngine;
 using Random = UnityEngine.Random;

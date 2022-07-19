@@ -1,5 +1,4 @@
-﻿using System;
-using Game.Enemy;
+﻿using Game.Enemy;
 using UnityEngine;
 
 namespace Game

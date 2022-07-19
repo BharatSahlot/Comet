@@ -1,7 +1,4 @@
-﻿using System;
-using Game.Data;
-using TMPro;
-using Unity.VisualScripting;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -20,7 +17,9 @@ namespace UI
 
         [Space]
         [SerializeField] private Button replayButton;
-        [SerializeField] private Button rewardButton;
+        [SerializeField] internal Button rewardButton;
+
+        [Space] [SerializeField] internal GameObject rewardedAdFailPopup;
         
         private void Awake()
         {
