@@ -140,13 +140,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: invert-x-icon
+      name: -x
       rect:
         serializedVersion: 2
-        x: 17
-        y: 1382
-        width: 643
-        height: 642
+        x: 0
+        y: 682.6666
+        width: 341.33334
+        height: 341.33334
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,20 +154,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e2287be90d567880800000000000000
-      internalID: -8613594940112887067
+      spriteID: ce1b2ffe1747b7c4582ae54e20907035
+      internalID: -1401383106
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: disable-shield-icon
+      name: shield disabled
       rect:
         serializedVersion: 2
-        x: 711
-        y: 1382
-        width: 642
-        height: 642
+        x: 341
+        y: 682.6666
+        width: 341.33334
+        height: 341.33334
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,20 +175,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc7f21b1512b50f80800000000000000
-      internalID: -8140904947684018225
+      spriteID: 1dd95e93ec7e6d54ab1ec2ad38e027ad
+      internalID: 1884863530
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: invert-y-icon
+      name: -y
       rect:
         serializedVersion: 2
-        x: 17
-        y: 692
-        width: 643
-        height: 642
+        x: 0
+        y: 341.66666
+        width: 341.33334
+        height: 341.33334
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -196,20 +196,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bdb38a8e95e55880800000000000000
-      internalID: -8622733442439463496
+      spriteID: d9d643cd0186dd145a4c68701ccb32d4
+      internalID: -865297551
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: invert-xy-icon
+      name: -xy
       rect:
         serializedVersion: 2
-        x: 17
-        y: 13
-        width: 643
-        height: 643
+        x: 0
+        y: 0.6666565
+        width: 341.33334
+        height: 341.33334
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -217,8 +217,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88182c2a0050014d0800000000000000
-      internalID: -3166025037752663672
+      spriteID: d030aaac1f813b346a4cfb3326e2922a
+      internalID: 966623396
       vertices: []
       indices: 
       edges: []
@@ -234,10 +234,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      invert-xy-icon: -3166025037752663672
-      invert-x-icon: -8613594940112887067
-      invert-y-icon: -8622733442439463496
-      disable-shield-icon: -8140904947684018225
+      player-effect-icons_2: -1293320570
+      player-effect-icons_6: 1185796118
+      player-effect-icons_4: -1290206261
+      shield disabled: 1884863530
+      -x: -1401383106
+      -y: -865297551
+      -xy: 966623396
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
