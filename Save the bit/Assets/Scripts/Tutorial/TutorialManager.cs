@@ -1,10 +1,13 @@
 using System;
+using Game;
 using UnityEngine;
 
 namespace Tutorial
 {
     public abstract class TutorialStep : MonoBehaviour
     {
+        [SerializeField] protected GameManager gameManager;
+        
         public Action OnEnd { get; set; }
         public abstract void Begin();
     }
@@ -21,7 +24,7 @@ namespace Tutorial
             {
                 step.OnEnd += () =>
                 {
-                    if (_currentStep >= steps.Length) return;
+                    if (_currentStep + 1 >= steps.Length) return;
                     steps[_currentStep + 1].Begin();
                     _currentStep++;
                 };

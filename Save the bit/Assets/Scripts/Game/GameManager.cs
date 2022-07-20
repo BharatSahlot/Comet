@@ -32,7 +32,6 @@ namespace Game
         [SerializeField] internal ResponsiveGameUIManager uiManager;
         [SerializeField] internal Explosion deadExplosion;
 
-
         internal PlayerController PlayerController;
         internal Player.Shield Shield;
 
@@ -112,6 +111,16 @@ namespace Game
             
             var elapsed = Time.time - _playStartTime;
             uiManager.GameUI.SetTime(TimeSpan.FromSeconds(elapsed).ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture));
+        }
+
+        public void StartMissileSpawner()
+        {
+            enemySpawner.enabled = true;
+        }
+
+        public void StartRaySpawner()
+        {
+            cosmicRaySpawner.StartSpawner();
         }
 
         [Preserve]

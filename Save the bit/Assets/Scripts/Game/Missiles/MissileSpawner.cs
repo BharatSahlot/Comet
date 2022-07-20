@@ -21,7 +21,7 @@ namespace Game.Missiles
             _pool = new Pool<MissileBasic>(prefab, 10);
         }
 
-        private void Start()
+        public void StartSpawner()
         {
             StartCoroutine(Spawn());
         }

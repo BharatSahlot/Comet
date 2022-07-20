@@ -22,7 +22,7 @@ namespace Game
             _pool = new Pool<CosmicRay>(prefab, 10);
         }
 
-        private void Start()
+        public void StartSpawner()
         {
             StartCoroutine(Spawn());
         }

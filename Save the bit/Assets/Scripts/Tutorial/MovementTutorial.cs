@@ -11,7 +11,7 @@ namespace Tutorial
         [System.Serializable]
         private class UI
         {
-            public GameObject root;
+            public CanvasGroup root;
             public TextMeshProUGUI text;
             public Image screen;
             public Image arrow;
@@ -29,6 +29,7 @@ namespace Tutorial
         private bool _isActive;
         private bool _isEnding;
         private float _timeSinceEndStart;
+        private float _timeSinceTutStart;
 
         public override void Begin()
         {
@@ -37,11 +38,11 @@ namespace Tutorial
 
             if (IsPortrait)
             {
-                portraitUI.root.SetActive(true);
+                portraitUI.root.gameObject.SetActive(true);
             }
             else
             {
-                landscapeUI.root.SetActive(true);
+                landscapeUI.root.gameObject.SetActive(true);
             }
         }
 
@@ -61,13 +62,20 @@ namespace Tutorial
                 float alpha = 1 - (_timeSinceEndStart / fadeDur);
 
                 UI ui = IsPortrait ? portraitUI : landscapeUI;
-                Color color = new Color(1, 1, 1, alpha);
-                ui.arrow.color *= color;
-                ui.screen.color *= color;
-                ui.text.color *= color;
+                ui.root.alpha = alpha;
+                // Color color = new Color(1, 1, 1, alpha);
+                // ui.arrow.color *= color;
+                // ui.screen.color *= color;
+                // ui.text.color *= color;
             }
             else
             {
+                _timeSinceTutStart += Time.unscaledDeltaTime;
+                float alpha = _timeSinceTutStart / fadeDur;
+                if (alpha >= 1) alpha = 1;
+                UI ui = IsPortrait ? portraitUI : landscapeUI;
+                ui.root.alpha = alpha;
+                
                 // end and move to next tutorial stage as soon as player uses the joystick
                 if (inputManager.GetMoveDirection() != Vector2.zero) _isEnding = true;
             }
@@ -76,7 +84,7 @@ namespace Tutorial
         private void End()
         {
             _isActive = _isEnding = false;
-            (IsPortrait ? portraitUI : landscapeUI).root.SetActive(false);
+            (IsPortrait ? portraitUI : landscapeUI).root.gameObject.SetActive(false);
             OnEnd.Invoke();
         }
     }
