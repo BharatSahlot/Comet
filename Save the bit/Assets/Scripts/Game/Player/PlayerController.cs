@@ -44,7 +44,6 @@ namespace Game.Player
 
         private void Update()
         {
-            Debug.Log(Time.timeScale);
             _audioSource.pitch = Time.timeScale;
         }
 

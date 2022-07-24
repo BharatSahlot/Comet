@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -20,12 +21,14 @@ namespace Game.Enemy
     }
     
 
-    // TODO make player use new modification system
     public class EnemySpawner : MonoBehaviour
     {
         [SerializeField] private WaveData[] waves;
 
         internal GameObject Player;
+
+        public event Action<int> WaveStart;
+        public event Action<int> WaveEnd;
 
         private readonly Dictionary<GameObject, Pool<EnemyBase>> _pools = new Dictionary<GameObject, Pool<EnemyBase>>();
         
@@ -35,14 +38,21 @@ namespace Game.Enemy
         private int _currentWave;
         private float _elapsedSinceWaveStart, _elapsedSinceLastSpawn;
 
+        private void OnEnable()
+        {
+            WaveStart?.Invoke(_currentWave);
+        }
+
         private void Update()
         {
             _elapsedSinceWaveStart += Time.deltaTime;
             if (_elapsedSinceWaveStart >= waves[_currentWave].waveDuration)
             {
+                if(_currentWave != waves.Length - 1) WaveEnd?.Invoke(_currentWave);
                 _elapsedSinceWaveStart = 0;
                 _currentWave++;
                 if (_currentWave >= waves.Length) _currentWave = waves.Length - 1;
+                else WaveStart?.Invoke(_currentWave);
             }
 
             _elapsedSinceLastSpawn += Time.deltaTime;

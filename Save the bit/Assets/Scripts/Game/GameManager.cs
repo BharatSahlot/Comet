@@ -45,6 +45,9 @@ namespace Game
         private int _currentPlayCoins = 0;
 
         private bool _isPlayingTutorial = false;
+
+        private int _lastWave;
+        private float _waveStartTime;
         
         private void Awake()
         {
@@ -103,6 +106,13 @@ namespace Game
                 GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", dataManager.CoinsCollected, "Gameplay", "CoinsCollected");
                 GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", dataManager.TimeCoins, "Gameplay", "TimeCoins");
                 
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail,
+                    $"Plane_{dataManager.EquippedPlane}",
+                    $"Shield_{dataManager.EquippedShield}",
+                    $"Wave_{_lastWave}",
+                    (int)(Time.time - _waveStartTime)
+                );
+                
                 dataManager.Coins += _currentPlayCoins;
                 uiManager.DeadMenu.Display(dataManager.TimeCoins, dataManager.CoinsCollected, dataManager.Coins);
                 
@@ -111,6 +121,28 @@ namespace Game
                 PlayerController = null;
                 Shield = null;
                 CrazySDK.Instance.GameplayStop();
+            };
+
+            // NOTE works only when WaveEnd called before next WaveStart
+            enemySpawner.WaveStart += (wave) =>
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start,
+                    $"Plane_{dataManager.EquippedPlane}",
+                    $"Shield_{dataManager.EquippedShield}",
+                    $"Wave_{wave}"
+                );
+                _lastWave = wave;
+                _waveStartTime = Time.time;
+            };
+
+            enemySpawner.WaveEnd += (wave) =>
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete,
+                    $"Plane_{dataManager.EquippedPlane}",
+                    $"Shield_{dataManager.EquippedShield}",
+                    $"Wave_{wave}",
+                    (int)(Time.time - _waveStartTime)
+                );
             };
         }
 
@@ -172,7 +204,6 @@ namespace Game
 
         private void OnAdSuccess()
         {
-            Debug.Log("Ad Playing");
             dataManager.Coins += _currentPlayCoins;
             
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", _currentPlayCoins, "Ads", "EndGameReward");

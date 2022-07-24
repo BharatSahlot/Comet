@@ -14,6 +14,7 @@ namespace Game.Player
 
         private float _elapsed;
         private bool _transitioning;
+        private bool _slowDownTime;
 
         private void Awake()
         {
@@ -24,12 +25,14 @@ namespace Game.Player
         {
             PlayerController.CosmicRayHit += (controller, ray) =>
             {
+                _slowDownTime = true;
                 _transitioning = true;
                 _elapsed = 0;
             };
             
             PlayerController.MissileHit += (controller, ray) =>
             {
+                _slowDownTime = false;
                 _transitioning = true;
                 _elapsed = 0;
             };
@@ -41,12 +44,13 @@ namespace Game.Player
 
             _elapsed += Time.deltaTime;
 
-            vignetteVolume.weight = vignetteWeightCurve.Evaluate(_elapsed / effectDuration);
-            Time.timeScale = timeScaleCurve.Evaluate(_elapsed / effectDuration);
+            vignetteVolume.weight = Mathf.Clamp01(vignetteWeightCurve.Evaluate(_elapsed / effectDuration));
+            
+            if(_slowDownTime) Time.timeScale = timeScaleCurve.Evaluate(_elapsed / effectDuration);
 
             if (_elapsed >= effectDuration)
             {
-                Time.timeScale = 1;
+                if(_slowDownTime) Time.timeScale = 1;
                 _transitioning = false;
                 _elapsed = 0;
                 vignetteVolume.weight = 0;
