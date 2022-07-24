@@ -1,5 +1,6 @@
 ﻿using System;
 using Game.Missiles;
+using TMPro;
 using UnityEngine;
 
 namespace Game.Player
@@ -22,6 +23,7 @@ namespace Game.Player
         private Rigidbody2D _rigidbody;
 
         internal float XMultiplier = 1, YMultiplier = 1;
+        private AudioSource _audioSource;
 
         private void Awake()
         {
@@ -34,10 +36,16 @@ namespace Game.Player
 
         private void Start()
         {
-            var audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.clip = idleSound;
-            audioSource.loop = true;
-            audioSource.Play();
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource.clip = idleSound;
+            _audioSource.loop = true;
+            _audioSource.Play();
+        }
+
+        private void Update()
+        {
+            Debug.Log(Time.timeScale);
+            _audioSource.pitch = Time.timeScale;
         }
 
         private void FixedUpdate()
@@ -79,7 +87,7 @@ namespace Game.Player
 
         private void OnDestroy()
         {
-            GetComponent<AudioSource>().Stop();
+            _audioSource.Stop();
             CosmicRayHit = null;
             MissileHit = null;
         }

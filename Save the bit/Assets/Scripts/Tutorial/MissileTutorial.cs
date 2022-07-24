@@ -72,7 +72,7 @@ namespace Tutorial
 
             if (_foundMissile)
             {
-                Time.timeScale = 0.1f;
+                Time.timeScale = 0.07f;
                 _timeSinceFoundMissile += Time.unscaledDeltaTime;
                 float t = Mathf.Clamp01(_timeSinceFoundMissile / fadeDur);
                 _currentUI.root.alpha = t;
@@ -87,7 +87,7 @@ namespace Tutorial
             _missile = null;
             _currentUI = null;
             Time.timeScale = 1.0f;
-            OnEnd.Invoke();
+            OnEnd();
         }
     }
 }

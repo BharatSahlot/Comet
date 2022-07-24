@@ -73,12 +73,22 @@ namespace Game.Data
             }
         }
         
-        public int EffectsVolume
+        public float EffectsVolume
         {
             get => _saveData.effectsVolume;
             set
             {
                 _saveData.effectsVolume = value;
+                Save(_saveData);
+            }
+        }
+
+        public bool PlayTutorial
+        {
+            get => _saveData.playTutorial;
+            set
+            {
+                _saveData.playTutorial = value;
                 Save(_saveData);
             }
         }
@@ -167,6 +177,8 @@ namespace Game.Data
             writer.Write(data.timeCoins);
             writer.Write(data.coinsCollected);
             writer.Write((int)data.inputMode);
+            writer.Write(data.effectsVolume);
+            writer.Write(data.playTutorial);
             
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
@@ -179,7 +191,10 @@ namespace Game.Data
             if (!File.Exists(FileName)) return new SaveData()
             {
                 planesBought = new List<int>() { 0 },
-                shieldsBought = new List<int>() { 0 }
+                shieldsBought = new List<int>() { 0 },
+                inputMode = InputMode.Joystick,
+                playTutorial = true,
+                effectsVolume = 1
             };
             
             using var reader = new BinaryReader(File.Open(FileName, FileMode.Open, FileAccess.Read));
@@ -189,9 +204,6 @@ namespace Game.Data
             try
             {
                 data.coins = reader.ReadInt32();
-                #if UNITY_EDITOR
-                data.coins = 10000;
-                #endif
                 data.planeIndex = reader.ReadInt32();
                 data.shieldIndex = reader.ReadInt32();
 
@@ -212,12 +224,16 @@ namespace Game.Data
                 data.coinsCollected = reader.ReadInt32();
                 data.timeCoins = reader.ReadInt32();
                 data.inputMode = (InputMode)reader.ReadInt32();
+                data.effectsVolume = reader.ReadSingle();
+                data.playTutorial = reader.ReadBoolean();
             }
             catch
             {
                 data.planesBought = new List<int>() { 0 };
                 data.shieldsBought = new List<int>() { 0 };
                 data.inputMode = InputMode.Joystick;
+                data.playTutorial = true;
+                data.effectsVolume = 1;
             }
 
             return data;

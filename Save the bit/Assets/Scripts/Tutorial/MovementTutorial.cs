@@ -34,7 +34,6 @@ namespace Tutorial
         public override void Begin()
         {
             _isActive = true;
-            Time.timeScale = 0.1f; // slow the time while in tutorial
 
             if (IsPortrait)
             {
@@ -85,7 +84,7 @@ namespace Tutorial
         {
             _isActive = _isEnding = false;
             (IsPortrait ? portraitUI : landscapeUI).root.gameObject.SetActive(false);
-            OnEnd.Invoke();
+            OnEnd();
         }
     }
 }

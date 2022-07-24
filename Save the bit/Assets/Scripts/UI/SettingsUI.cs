@@ -19,7 +19,7 @@ namespace UI
 
         [SerializeField] private DataManager dataManager;
 
-        private void Awake()
+        private void Start()
         {
             if (dataManager.InputMode == InputMode.Joystick)
             {
@@ -51,7 +51,7 @@ namespace UI
             volumeSlider.value = dataManager.EffectsVolume;
             volumeSlider.onValueChanged.AddListener((volume) =>
             {
-                dataManager.EffectsVolume = Mathf.RoundToInt(volume * 100);
+                dataManager.EffectsVolume = volume;
                 AudioListener.volume = volume;
             });
         }

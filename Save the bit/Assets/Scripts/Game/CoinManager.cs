@@ -19,7 +19,7 @@ namespace Game
 
         private Pool<Coin> _pool;
 
-        private void Start()
+        public void StartSpawning()
         {
             _pool = new Pool<Coin>(coinPrefab, 5);
             uiManager.GameUI.SetCoins(DataManager.CoinsCollected);

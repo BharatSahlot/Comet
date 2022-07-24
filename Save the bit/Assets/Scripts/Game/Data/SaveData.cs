@@ -18,6 +18,7 @@ namespace Game.Data
         public int timeCoins;
 
         public InputMode inputMode;
-        public int effectsVolume;
+        public float effectsVolume;
+        public bool playTutorial;
     }
 }

@@ -21,6 +21,7 @@ public class Explosion : MonoBehaviour
 
     public void ExplodeAt(Vector3 position)
     {
+        _audioSource.pitch = Time.timeScale;
         gameObject.SetActive(true);
         transform.position = position;
         float duration = 0;

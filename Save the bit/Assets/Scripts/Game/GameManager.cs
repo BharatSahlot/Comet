@@ -4,6 +4,7 @@ using Cinemachine;
 using Game.Data;
 using Game.Enemy;
 using Game.Player;
+using Tutorial;
 using UI;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -15,6 +16,8 @@ namespace Game
     {
         [SerializeField] private DataManager dataManager;
         [SerializeField] private GameData gameData;
+        
+        [SerializeField] internal TutorialManager tutorialManager;
 
         [SerializeField] internal ModificationController modificationController;
         [SerializeField] internal InputManager inputManager;
@@ -31,7 +34,7 @@ namespace Game
 
         [SerializeField] internal ResponsiveGameUIManager uiManager;
         [SerializeField] internal Explosion deadExplosion;
-
+        
         internal PlayerController PlayerController;
         internal Player.Shield Shield;
 
@@ -40,8 +43,11 @@ namespace Game
         private bool _playing = true;
         private int _currentPlayCoins = 0;
 
+        private bool _isPlayingTutorial = false;
+        
         private void Awake()
         {
+            Time.timeScale = 1f;
             dataManager.gameData = gameData;
             var playerPrefab = gameData.planes[dataManager.EquippedPlane].planePrefab;
             var shieldPrefab = gameData.shields[dataManager.EquippedShield].shieldPrefab;
@@ -108,15 +114,40 @@ namespace Game
         {
             inputManager.SetInputMode(dataManager.InputMode);
             _playing = true;
-            _playStartTime = Time.time;
+
+            if (dataManager.PlayTutorial)
+            {
+                dataManager.PlayTutorial = false;
+                
+                _isPlayingTutorial = true;
+                tutorialManager.TutorialComplete += () =>
+                {
+                    _isPlayingTutorial = false;
+                    _playStartTime = Time.time;
+                    coinManager.StartSpawning();
+                };
+                tutorialManager.StartTutorial();
+            }
+            else
+            {
+                StartMissileSpawner();
+                StartRaySpawner();
+                coinManager.StartSpawning();
+            }
+            // _playStartTime = Time.time;
         }
 
         private void Update()
         {
             if (!_playing) return;
-            
+
+            AudioListener.volume = dataManager.EffectsVolume;
             var elapsed = Time.time - _playStartTime;
-            uiManager.GameUI.SetTime(TimeSpan.FromSeconds(elapsed).ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture));
+            if (!_isPlayingTutorial)
+            {
+                uiManager.GameUI.SetTime(TimeSpan.FromSeconds(elapsed)
+                    .ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture));
+            }
         }
 
         public void StartMissileSpawner()
@@ -153,6 +184,7 @@ namespace Game
         {
             dataManager = null;
             gameData = null;
+            tutorialManager = null;
             modificationController = null;
             inputManager = null;
             // missileSpawners = null;

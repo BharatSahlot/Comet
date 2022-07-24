@@ -78,9 +78,9 @@ namespace Tutorial
 
             if (_foundRay)
             {
-                Time.timeScale = 0.01f;
                 _timeSinceFoundRay += Time.unscaledDeltaTime;
                 float t = Mathf.Clamp01(_timeSinceFoundRay / fadeDur);
+                Time.timeScale = Mathf.LerpAngle(1, 0.06f, 3 * t);
                 _currentUI.root.alpha = t;
                 _currentUI.mask.transform.position = _camera.WorldToScreenPoint(_ray.transform.position);
             }
@@ -93,7 +93,7 @@ namespace Tutorial
             _ray = null;
             _currentUI = null;
             Time.timeScale = 1.0f;
-            OnEnd.Invoke();
+            OnEnd();
         }
     }
 }

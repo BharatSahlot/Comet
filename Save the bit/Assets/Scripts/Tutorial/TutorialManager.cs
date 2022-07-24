@@ -7,32 +7,39 @@ namespace Tutorial
     public abstract class TutorialStep : MonoBehaviour
     {
         [SerializeField] protected GameManager gameManager;
-        
-        public Action OnEnd { get; set; }
+
+        public event Action End;
         public abstract void Begin();
+
+        protected virtual void OnEnd()
+        {
+            End?.Invoke();
+        }
     }
     
     public class TutorialManager : MonoBehaviour
     {
         [SerializeField] private TutorialStep[] steps;
-
+        
+        public event Action TutorialComplete;
+        
         private int _currentStep = 0;
 
-        private void Awake()
+        public void StartTutorial()
         {
             foreach (var step in steps)
             {
-                step.OnEnd += () =>
+                step.End += () =>
                 {
-                    if (_currentStep + 1 >= steps.Length) return;
+                    if (_currentStep + 1 >= steps.Length)
+                    {
+                        TutorialComplete?.Invoke();
+                        return;
+                    }
                     steps[_currentStep + 1].Begin();
                     _currentStep++;
                 };
             }
-        }
-
-        private void Start()
-        {
             steps[0].Begin();
         }
     }

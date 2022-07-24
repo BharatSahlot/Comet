@@ -11,6 +11,8 @@ namespace UI
 
         private void Start()
         {
+            Debug.Log(dataManager.EffectsVolume);
+            AudioListener.volume = dataManager.EffectsVolume;
             coinText.SetText($"{dataManager.Coins}");
         }
     }
