@@ -4,6 +4,7 @@ using Cinemachine;
 using Game.Data;
 using Game.Enemy;
 using Game.Player;
+using GameAnalyticsSDK;
 using Tutorial;
 using UI;
 using UnityEngine;
@@ -98,7 +99,10 @@ namespace Game
 
                 dataManager.TimeCoins = Mathf.FloorToInt(Time.time - _playStartTime);
                 _currentPlayCoins = dataManager.CoinsCollected + dataManager.TimeCoins;
-                // dataManager.Coins += dataManager.CoinsCollected + dataManager.TimeCoins;
+                
+                GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", dataManager.CoinsCollected, "Gameplay", "CoinsCollected");
+                GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", dataManager.TimeCoins, "Gameplay", "TimeCoins");
+                
                 dataManager.Coins += _currentPlayCoins;
                 uiManager.DeadMenu.Display(dataManager.TimeCoins, dataManager.CoinsCollected, dataManager.Coins);
                 
@@ -170,6 +174,9 @@ namespace Game
         {
             Debug.Log("Ad Playing");
             dataManager.Coins += _currentPlayCoins;
+            
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", _currentPlayCoins, "Ads", "EndGameReward");
+            
             _currentPlayCoins = 0;
             uiManager.DeadMenu.UpdateTotalCoins(dataManager.Coins);
             uiManager.DeadMenu.rewardButton.gameObject.SetActive(false);

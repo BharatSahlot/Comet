@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using GameAnalyticsSDK;
 using UnityEngine;
 
 namespace Game.Data
@@ -117,6 +118,8 @@ namespace Game.Data
 
             _saveData.coins -= cost;
             _saveData.planesBought.Add(index);
+            
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "Coins", cost, "Plane", $"Plane_{index}");
 
             if (equip)
             {
@@ -137,7 +140,9 @@ namespace Game.Data
             
             var cost = gameData.shields[index].cost;
             if (cost > Coins) return false;
-
+            
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "Coins", cost, "Plane", $"Plane_{index}");
+            
             _saveData.coins -= cost;
             _saveData.shieldsBought.Add(index);
 
