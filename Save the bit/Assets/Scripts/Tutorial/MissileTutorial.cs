@@ -1,39 +1,33 @@
-﻿using TMPro;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Tutorial
 {
-    public class CosmicRayTutorial : TutorialStep
+    public class MissileTutorial : TutorialStep
     {
         [System.Serializable]
         private class UI
         {
             public CanvasGroup root;
-            public Image screen;
-            public TextMeshProUGUI text;
-            public Button okBtn;
             public GameObject mask;
+            public Button okBtn;
         }
 
         [SerializeField] private UI portraitUI;
         [SerializeField] private UI landscapeUI;
-        [SerializeField] private float arrowDistance = 5;
-        [SerializeField] private float fadeDur = 2;
+        [SerializeField] private float fadeDur;
         
-        private bool _isActive;
-        private bool _isEnding;
-        
-        private Camera _camera;
-
         private UI _currentUI;
-        private GameObject _ray;
-        private bool _foundRay;
-
-        private float _timeSinceFoundRay;
+        private Camera _camera;
+        private bool _isEnding;
+        private bool _isActive;
         private float _timeSinceEnd;
+        private bool _foundMissile;
+        private GameObject _missile;
+        private float _timeSinceFoundMissile;
 
-        private void Start()
+        private void Awake()
         {
             _camera = Camera.main;
             _currentUI = Screen.height >= Screen.width ? portraitUI : landscapeUI;
@@ -42,14 +36,14 @@ namespace Tutorial
 
         public override void Begin()
         {
-            gameManager.StartRaySpawner();
+            gameManager.StartMissileSpawner();
             _isActive = true;
         }
 
         private void LateUpdate()
         {
             if (!_isActive) return;
-
+            
             if (_isEnding)
             {
                 _timeSinceEnd += Time.unscaledDeltaTime;
@@ -65,32 +59,32 @@ namespace Tutorial
             }
 
             var screenBounds = Utility.GetScreenBounds(10, _camera);
-            if (!_foundRay)
+            if (!_foundMissile)
             {
-                var cosmicRay =
-                    Physics2D.OverlapArea(screenBounds.min, screenBounds.max, LayerMask.GetMask("CosmicRay"));
-                if (cosmicRay == null) return;
+                var missile =
+                    Physics2D.OverlapArea(screenBounds.min, screenBounds.max, LayerMask.GetMask("Missile"));
+                if (missile == null) return;
 
-                _foundRay = true;
-                _ray = cosmicRay.gameObject;
+                _foundMissile = true;
+                _missile = missile.gameObject;
                 _currentUI.root.gameObject.SetActive(true);
             }
 
-            if (_foundRay)
+            if (_foundMissile)
             {
-                Time.timeScale = 0.01f;
-                _timeSinceFoundRay += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(_timeSinceFoundRay / fadeDur);
+                Time.timeScale = 0.1f;
+                _timeSinceFoundMissile += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(_timeSinceFoundMissile / fadeDur);
                 _currentUI.root.alpha = t;
-                _currentUI.mask.transform.position = _camera.WorldToScreenPoint(_ray.transform.position);
+                _currentUI.mask.transform.position = _camera.WorldToScreenPoint(_missile.transform.position);
             }
         }
 
         private void End()
         {
             _currentUI.root.gameObject.SetActive(false);
-            _foundRay = _isActive = _isEnding = false;
-            _ray = null;
+            _foundMissile = _isActive = _isEnding = false;
+            _missile = null;
             _currentUI = null;
             Time.timeScale = 1.0f;
             OnEnd.Invoke();

@@ -29,7 +29,9 @@ public class RigidbodyController
         // var angle = Mathf.Abs(Vector2.SignedAngle(_moveDir, input));
         // _moveDir = Vector2.SmoothDamp(_moveDir, input, ref _angularVelocity, angle / (smoothMoveRotation), smoothMoveRotation * Time.fixedDeltaTime, Time.fixedDeltaTime).normalized;
         
-        rigidbody.AddForce(_moveDir * speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+        rigidbody.AddForce(_moveDir * (speed * Time.fixedDeltaTime), ForceMode2D.Impulse);
+
+        // rigidbody.drag = (1 - Time.timeScale) * 10000000;
         
         var dir = rigidbody.velocity.normalized;
         var angle = Vector2.SignedAngle(Vector2.up, dir);

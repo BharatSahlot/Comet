@@ -84,6 +84,12 @@ namespace Game
                 Destroy(PlayerController.gameObject);
                 Destroy(Shield.gameObject);
 
+                var ui = GameObject.FindObjectsOfType<Canvas>();
+                foreach (var canvas in ui)
+                {
+                    canvas.gameObject.SetActive(false);
+                }
+
                 dataManager.TimeCoins = Mathf.FloorToInt(Time.time - _playStartTime);
                 _currentPlayCoins = dataManager.CoinsCollected + dataManager.TimeCoins;
                 // dataManager.Coins += dataManager.CoinsCollected + dataManager.TimeCoins;
